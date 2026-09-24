@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sow — Men's Hair Stylist | Um novo conceito para o homem</title>
+<meta name="description" content="Sow — Men's Hair Stylist em Alphaville. Corte, barba e cuidado masculino de alto padrão, com atendimento infantil premium. Agende seu horário.">
+<meta name="theme-color" content="#0B0B0C">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sow — Men's Hair Stylist">
+<meta property="og:description" content="Um novo conceito para o homem. Corte, barba e cuidado masculino de alto padrão em Alphaville.">
+<meta property="og:image" content="img/famoso-7.jpg">
+<meta property="og:locale" content="pt_BR">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%230B0B0C'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='21'%20font-style='italic'%20fill='%23C9A15B'%20text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+<script>
+  /* Set the pre-animation state only when we will actually animate.
+     No-JS and reduced-motion users get the full content immediately. */
+  (function () {
+    try {
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('gsap-ready');
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<script defer src="assets/js/vendor/gsap.min.js"></script>
+<script defer src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="assets/js/vendor/SplitText.min.js"></script>
+<script defer src="assets/js/main.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#inicio">Pular para o conteúdo</a>
+
+<!-- ================= HEADER / NAV ================= -->
+<header class="site-header" id="topo">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="#inicio" aria-label="Sow — Men's Hair Stylist, ir para o início">
+      <span class="brand__mark">Sow</span>
+      <span class="brand__tag">Men's Hair Stylist</span>
+    </a>
+
+    <nav class="nav" aria-label="Navegação principal">
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Abrir menu</span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="#kids">Kids</a></li>
+        <li><a href="#cortes">Cortes</a></li>
+        <li><a href="#famosos">Famosos</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a class="nav__cta" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Agendar horário</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" aria-label="Apresentação">
+    <div class="hero__media">
+      <video class="hero__video" autoplay muted loop playsinline preload="metadata"
+             poster="img/corte-1.jpg">
+        <source src="videos/header.mp4" type="video/mp4">
+      </video>
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="hero__grain" aria-hidden="true"></div>
+    </div>
+
+    <div class="wrap hero__inner">
+      <div class="hero__content">
+        <p class="hero__eyebrow" data-hero="eyebrow">Alphaville · desde o primeiro corte</p>
+        <h1 class="hero__title">
+          <span class="hero__line-wrap"><span class="hero__line" data-hero="line">Cuidar do seu estilo</span></span>
+          <span class="hero__line-wrap"><span class="hero__line" data-hero="line">é manter quem</span></span>
+          <span class="hero__line-wrap"><span class="hero__line hero__line--accent" data-hero="line">você é.</span></span>
+        </h1>
+        <p class="hero__lede" data-hero="lede">
+          Corte, barba e cuidado masculino com precisão de estúdio. Um novo
+          conceito para o homem — e para o seu filho.
+        </p>
+        <div class="hero__actions" data-hero="actions">
+          <a class="btn btn--solid" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 8.6c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.1.2-.2.4 0 .7.3.5.9 1.4 1.8 2 .8.5 1.3.6 1.6.4l.6-.5c.2-.1.4-.2.6-.1l1.8.9c.4.2.4.4.4.6v.6c0 .3-.1.6-.6.9-.5.3-1.4.6-2.4.4-1.2-.2-3-1-4.6-2.6C7.9 12.7 7 11 6.8 9.8c-.2-1 .1-1.9.4-2.4Z"/></svg>
+            Agendar no WhatsApp
+          </a>
+          <a class="btn btn--ghost" href="#cortes">Ver os cortes</a>
+        </div>
+      </div>
+
+      <aside class="hero__meta" data-hero="meta" aria-label="Informações rápidas">
+        <div class="hero__meta-row">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          <div>
+            <span class="hero__meta-label">Onde estamos</span>
+            <span class="hero__meta-value">Alphaville · Barueri/SP <em>(endereço a confirmar)</em></span>
+          </div>
+        </div>
+        <div class="hero__meta-row">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          <div>
+            <span class="hero__meta-label">Funcionamento</span>
+            <span class="hero__meta-value">Ter a Sex · 08h–19h30 &nbsp;|&nbsp; Sáb · 08h–16h30</span>
+          </div>
+        </div>
+        <div class="hero__meta-row">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4h3l1.5 4.5-2 1.5a11 11 0 0 0 5 5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 5 6a2 2 0 0 1 2-2Z"/></svg>
+          <div>
+            <span class="hero__meta-label">Contato</span>
+            <span class="hero__meta-value">(11) 0000-0000 <em>(a confirmar)</em></span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <a class="hero__scroll" href="#kids" aria-label="Rolar para a próxima seção">
+      <span></span>
+    </a>
+  </section>
+
+  <!-- ================= KIDS ================= -->
+  <section class="kids" id="kids" aria-labelledby="kids-title">
+    <div class="kids__layer kids__bg" aria-hidden="true"><span>KIDS</span></div>
+    <div class="kids__layer kids__glow" aria-hidden="true"></div>
+
+    <div class="wrap kids__inner">
+      <div class="kids__media kids__layer" data-parallax="media">
+        <video class="kids__video" autoplay muted loop playsinline preload="none"
+               poster="img/corte-kids-1.jpg">
+          <source src="videos/corte-kids.mp4" type="video/mp4">
+        </video>
+        <figure class="kids__badge kids__layer" data-parallax="badge">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 13h13l2-5h3"/><circle cx="7" cy="18" r="2"/><circle cx="16" cy="18" r="2"/><path d="M5 13V7h6l3 4"/></svg>
+          <figcaption>Cadeira-carrinho, telão e paciência de sobra. A primeira vez importa.</figcaption>
+        </figure>
+      </div>
+
+      <div class="kids__copy kids__layer" data-parallax="copy">
+        <p class="section__eyebrow">Atendimento infantil</p>
+        <h2 class="section__title" id="kids-title" data-reveal="kids-title">
+          O tratamento que<br><span class="u-accent">seu filho merece</span>
+        </h2>
+        <p class="prose">
+          Criança não é adulto pequeno. É um profissional preparado para o tempo
+          da criança: sem pressa, sem susto, com brincadeira na medida certa e um
+          resultado que os pais reconhecem na hora.
+        </p>
+        <ul class="kids__list">
+          <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Ambiente pensado para os pequenos</li>
+          <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Barbeiros com jeito para a primeira vez</li>
+          <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Registro do "primeiro corte" de recordação</li>
+        </ul>
+        <a class="btn btn--solid" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Agendar o corte do meu filho</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GALERIA DE CORTES ================= -->
+  <section class="cuts section" id="cortes" aria-labelledby="cuts-title">
+    <div class="wrap">
+      <header class="section__head">
+        <div>
+          <p class="section__eyebrow">Galeria</p>
+          <h2 class="section__title" id="cuts-title" data-reveal>Cortes que assinam<br>a casa</h2>
+        </div>
+        <p class="section__intro prose">
+          Do clássico ao contemporâneo. Uma seleção de trabalhos feitos na
+          cadeira da Sow — os de assinatura e os de todo dia.
+        </p>
+      </header>
+
+      <div class="cuts__filter" role="tablist" aria-label="Filtrar cortes">
+        <button class="chip is-active" type="button" role="tab" aria-selected="true" data-filter="all">Todos</button>
+        <button class="chip" type="button" role="tab" aria-selected="false" data-filter="signature">Assinatura</button>
+        <button class="chip" type="button" role="tab" aria-selected="false" data-filter="classic">Do dia a dia</button>
+      </div>
+
+      <ul class="cuts__grid">
+        <li class="cut-card cut-card--wide" data-cat="signature" data-reveal>
+          <img src="img/corte-1.jpg" alt="Barbeiro finalizando um degradê com tesoura em um cliente." loading="lazy" decoding="async" width="1080" height="1080">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Assinatura</span>
+            <h3>Degradê navalhado</h3>
+            <p>Transição limpa, topo com movimento e acabamento na navalha.</p>
+          </div>
+        </li>
+        <li class="cut-card" data-cat="classic" data-reveal>
+          <img src="img/barba.jpg" alt="Cliente recebendo alinhamento de barba com máquina." loading="lazy" decoding="async" width="1080" height="720">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Barba</span>
+            <h3>Barba desenhada</h3>
+            <p>Contorno definido, pezinho e toalha quente.</p>
+          </div>
+        </li>
+        <li class="cut-card" data-cat="signature" data-reveal>
+          <img src="img/famoso-2.jpg" alt="Cliente atleta após o corte, em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Assinatura</span>
+            <h3>Social com textura</h3>
+            <p>Curto dos lados, comprimento de cima trabalhado ponta a ponta.</p>
+          </div>
+        </li>
+        <li class="cut-card" data-cat="classic" data-reveal>
+          <img src="img/famoso-4.jpg" alt="Cliente após corte raspado, conversando com o barbeiro." loading="lazy" decoding="async" width="1080" height="1350">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Clássico</span>
+            <h3>Máquina baixa</h3>
+            <p>Raspado uniforme, barba curta e linha frontal marcada.</p>
+          </div>
+        </li>
+        <li class="cut-card" data-cat="signature" data-reveal>
+          <img src="img/corte-kids-1.jpg" alt="Criança sorrindo em cadeira-carrinho após o corte." loading="lazy" decoding="async" width="1080" height="1080">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Kids</span>
+            <h3>Primeiro corte</h3>
+            <p>Topete jogado para o lado, laterais suaves e zero drama.</p>
+          </div>
+        </li>
+        <li class="cut-card" data-cat="classic" data-reveal>
+          <img src="img/famoso-7.jpg" alt="Cliente e barbeiro em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
+          <div class="cut-card__body">
+            <span class="cut-card__tag">Clássico</span>
+            <h3>Corte na régua</h3>
+            <p>Pente e tesoura, comprimento médio e caimento natural.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= FAMOSOS ================= -->
+  <section class="fame" id="famosos" aria-labelledby="fame-title">
+    <div class="wrap">
+      <header class="section__head">
+        <div>
+          <p class="section__eyebrow">Confiança</p>
+          <h2 class="section__title" id="fame-title" data-reveal>Famosos no<br>Espaço Sow</h2>
+        </div>
+        <p class="section__intro prose">
+          Atletas, artistas e apresentadores sentam na mesma cadeira. O padrão
+          é o mesmo para todo mundo.
+        </p>
+      </header>
+    </div>
+
+    <div class="fame__track" data-marquee>
+      <ul class="fame__row">
+        <li class="fame-card"><img src="img/famoso-3.jpg" alt="Marcos Rocha, jogador de futebol, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
+        <li class="fame-card"><img src="img/famoso-1.jpg" alt="Henry Klauss, ilusionista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
+        <li class="fame-card"><img src="img/famoso-6.jpg" alt="Tirullipa, humorista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
+        <li class="fame-card"><img src="img/famoso-4.jpg" alt="Bam Bam, lutador, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
+        <li class="fame-card"><img src="img/famoso-2.jpg" alt="Atleta profissional com a camisa do time na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
+      </ul>
+      <ul class="fame__row" aria-hidden="true">
+        <li class="fame-card"><img src="img/famoso-3.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
+        <li class="fame-card"><img src="img/famoso-1.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
+        <li class="fame-card"><img src="img/famoso-6.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
+        <li class="fame-card"><img src="img/famoso-4.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
+        <li class="fame-card"><img src="img/famoso-2.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= SERVIÇOS E PREÇOS ================= -->
+  <section class="services section" id="servicos" aria-labelledby="svc-title">
+    <div class="wrap">
+      <header class="section__head">
+        <div>
+          <p class="section__eyebrow">Serviços avulsos</p>
+          <h2 class="section__title" id="svc-title" data-reveal>Preços claros,<br>sem surpresa</h2>
+        </div>
+        <p class="section__intro prose">
+          Valores de referência para agendamento avulso.
+          <strong>Tabela provisória — a Sow ainda vai revisar cada preço.</strong>
+        </p>
+      </header>
+
+      <ul class="svc__grid">
+        <li class="svc-card" data-reveal>
+          <div class="svc-card__top"><h3>Corte Sow</h3><span class="svc-card__price">R$ 90</span></div>
+          <p>Lavagem, corte na tesoura/máquina e finalização.</p>
+          <span class="svc-card__time">~45 min</span>
+        </li>
+        <li class="svc-card svc-card--feature" data-reveal>
+          <div class="svc-card__top"><h3>Corte + Barba</h3><span class="svc-card__price">R$ 140</span></div>
+          <p>O combo completo: corte, barba desenhada e toalha quente.</p>
+          <span class="svc-card__time">~1h10</span>
+        </li>
+        <li class="svc-card" data-reveal>
+          <div class="svc-card__top"><h3>Barba</h3><span class="svc-card__price">R$ 60</span></div>
+          <p>Contorno, navalha e hidratação.</p>
+          <span class="svc-card__time">~30 min</span>
+        </li>
+        <li class="svc-card" data-reveal>
+          <div class="svc-card__top"><h3>Corte Kids</h3><span class="svc-card__price">R$ 70</span></div>
+          <p>Atendimento infantil dedicado, até 12 anos.</p>
+          <span class="svc-card__time">~40 min</span>
+        </li>
+        <li class="svc-card" data-reveal>
+          <div class="svc-card__top"><h3>Pezinho / acabamento</h3><span class="svc-card__price">R$ 35</span></div>
+          <p>Manutenção entre cortes, contorno e pescoço.</p>
+          <span class="svc-card__time">~15 min</span>
+        </li>
+        <li class="svc-card" data-reveal>
+          <div class="svc-card__top"><h3>Tratamento capilar</h3><span class="svc-card__price">R$ 120</span></div>
+          <p>Hidratação profunda ou selagem, sob avaliação.</p>
+          <span class="svc-card__time">~50 min</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= PLANOS MENSAIS ================= -->
+  <section class="plans section" id="planos" aria-labelledby="plans-title">
+    <div class="wrap">
+      <header class="section__head">
+        <div>
+          <p class="section__eyebrow">Cortes no mês</p>
+          <h2 class="section__title" id="plans-title" data-reveal>Assine o seu<br>visual em dia</h2>
+        </div>
+        <p class="section__intro prose">
+          Para quem não deixa o corte passar do ponto. Cobrança mensal, agenda
+          prioritária. <strong>Valores e regras provisórios — a Sow vai ajustar.</strong>
+        </p>
+      </header>
+
+      <ul class="plans__grid">
+        <li class="plan-card" data-reveal>
+          <h3 class="plan-card__name">Aparado</h3>
+          <p class="plan-card__price"><span>R$ 149</span>/mês</p>
+          <ul class="plan-card__list">
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 2 cortes por mês</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 1 pezinho de cortesia</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Agenda prioritária</li>
+          </ul>
+          <a class="btn btn--ghost" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Quero este</a>
+        </li>
+
+        <li class="plan-card plan-card--best" data-reveal>
+          <span class="plan-card__badge">Mais vendido</span>
+          <h3 class="plan-card__name">Na régua</h3>
+          <p class="plan-card__price"><span>R$ 219</span>/mês</p>
+          <ul class="plan-card__list">
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 4 cortes por mês</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Pezinho ilimitado</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 1 barba por mês</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 10% em produtos</li>
+          </ul>
+          <a class="btn btn--solid" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Assinar agora</a>
+        </li>
+
+        <li class="plan-card" data-reveal>
+          <h3 class="plan-card__name">Completo</h3>
+          <p class="plan-card__price"><span>R$ 319</span>/mês</p>
+          <ul class="plan-card__list">
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Cortes ilimitados</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Barba ilimitada</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 1 tratamento capilar/mês</li>
+            <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> 15% em produtos</li>
+          </ul>
+          <a class="btn btn--ghost" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Quero este</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= AGENDAR ================= -->
+  <section class="book" id="agendar" aria-labelledby="book-title">
+    <div class="wrap book__inner">
+      <p class="section__eyebrow">Agendamento</p>
+      <h2 class="section__title" id="book-title" data-reveal>Sua cadeira está<br>quase reservada</h2>
+      <p class="prose book__prose">
+        O agendamento é pelo WhatsApp — resposta rápida, escolha de barbeiro e
+        horário. Assim que o número oficial for confirmado, ele entra aqui.
+      </p>
+      <div class="book__actions">
+        <a class="btn btn--solid btn--lg" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 8.6c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.1.2-.2.4 0 .7.3.5.9 1.4 1.8 2 .8.5 1.3.6 1.6.4l.6-.5c.2-.1.4-.2.6-.1l1.8.9c.4.2.4.4.4.6v.6c0 .3-.1.6-.6.9-.5.3-1.4.6-2.4.4-1.2-.2-3-1-4.6-2.6C7.9 12.7 7 11 6.8 9.8c-.2-1 .1-1.9.4-2.4Z"/></svg>
+          Abrir conversa no WhatsApp
+        </a>
+        <p class="book__hours">
+          <strong>Terça a sexta</strong> 08h – 19h30 &nbsp;·&nbsp;
+          <strong>Sábado</strong> 08h – 16h30 &nbsp;·&nbsp;
+          <span class="u-muted">segunda e domingo fechado</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INSTAGRAM ================= -->
+  <section class="ig section" id="instagram" aria-labelledby="ig-title">
+    <div class="wrap">
+      <header class="section__head">
+        <div>
+          <p class="section__eyebrow">No feed</p>
+          <h2 class="section__title" id="ig-title" data-reveal>@espacosow</h2>
+        </div>
+        <p class="section__intro prose">
+          O dia a dia da casa, os bastidores da obra do novo espaço e os cortes
+          da semana. Segue lá.
+        </p>
+      </header>
+
+      <ul class="ig__grid">
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-7.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/corte-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-3.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/barba.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/corte-kids-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+      </ul>
+
+      <a class="btn btn--ghost" href="https://instagram.com/espacosow" target="_blank" rel="noopener">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r="1"/></svg>
+        Seguir no Instagram
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= CONTATO / LOCALIZAÇÃO ================= -->
+  <section class="contact section" id="contato" aria-labelledby="contact-title">
+    <div class="wrap contact__inner">
+      <div class="contact__col">
+        <p class="section__eyebrow">Contato & localização</p>
+        <h2 class="section__title" id="contact-title" data-reveal>Chega mais<br>na Sow</h2>
+
+        <dl class="contact__list">
+          <div>
+            <dt><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg> Endereço</dt>
+            <dd>Alameda provisória, 000 — Alphaville, Barueri/SP <span class="u-muted">(a confirmar)</span></dd>
+          </div>
+          <div>
+            <dt><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Horários</dt>
+            <dd>
+              Segunda — fechado<br>
+              Terça a sexta — 08h às 19h30<br>
+              Sábado — 08h às 16h30<br>
+              Domingo — fechado
+            </dd>
+          </div>
+          <div>
+            <dt><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4h3l1.5 4.5-2 1.5a11 11 0 0 0 5 5l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 5 6a2 2 0 0 1 2-2Z"/></svg> Telefone</dt>
+            <dd>(11) 0000-0000 <span class="u-muted">(a confirmar)</span></dd>
+          </div>
+          <div>
+            <dt><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r="1"/></svg> Social</dt>
+            <dd><a href="https://instagram.com/espacosow" target="_blank" rel="noopener">@espacosow</a></dd>
+          </div>
+        </dl>
+
+        <div class="contact__actions">
+          <a class="btn btn--solid" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">Falar no WhatsApp</a>
+          <a class="btn btn--ghost" href="https://instagram.com/espacosow" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+
+      <div class="contact__map" role="img" aria-label="Mapa ilustrativo — localização exata a confirmar">
+        <div class="contact__map-grid" aria-hidden="true"></div>
+        <span class="contact__pin" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        </span>
+        <p class="contact__map-note">Alphaville · Barueri/SP</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <span class="brand__mark">Sow</span>
+      <p>Um novo conceito para o homem.<br>Corte, barba e cuidado masculino em Alphaville.</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Rodapé">
+      <h3>Navegar</h3>
+      <ul>
+        <li><a href="#kids">Kids</a></li>
+        <li><a href="#cortes">Cortes</a></li>
+        <li><a href="#famosos">Famosos</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#agendar">Agendar</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__col">
+      <h3>Funcionamento</h3>
+      <ul class="plain">
+        <li>Ter – Sex · 08h – 19h30</li>
+        <li>Sáb · 08h – 16h30</li>
+        <li>Seg e Dom · fechado</li>
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <h3>Contato</h3>
+      <ul class="plain">
+        <li>Alphaville · Barueri/SP</li>
+        <li>(11) 0000-0000</li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener">@espacosow</a></li>
+        <li><a href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener">WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap site-footer__base">
+    <p>© <span id="year">2026</span> Sow — Men's Hair Stylist. Todos os direitos reservados.</p>
+    <p>CNPJ 00.000.000/0001-00 <span class="u-muted">(a confirmar)</span> · Site em construção — dados provisórios.</p>
+  </div>
+</footer>
+
+<!-- ================= WHATSAPP FLUTUANTE ================= -->
+<a class="wa-float" href="https://wa.me/message/MIBM3674OG5UF1" target="_blank" rel="noopener" aria-label="Agendar pelo WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 8.6c.2-.5.4-.5.7-.5h.6c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.1.2-.2.4 0 .7.3.5.9 1.4 1.8 2 .8.5 1.3.6 1.6.4l.6-.5c.2-.1.4-.2.6-.1l1.8.9c.4.2.4.4.4.6v.6c0 .3-.1.6-.6.9-.5.3-1.4.6-2.4.4-1.2-.2-3-1-4.6-2.6C7.9 12.7 7 11 6.8 9.8c-.2-1 .1-1.9.4-2.4Z"/></svg>
+  <span class="wa-float__label">Agendar</span>
+</a>
+
+</body>
+</html>
