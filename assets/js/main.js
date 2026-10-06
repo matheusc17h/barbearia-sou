@@ -84,7 +84,7 @@
             kidsVideo.pause();
           }
         });
-      }, { threshold: 0.25 }).observe(kidsVideo);
+      }, { threshold: 0.25, rootMargin: "200px 0px" }).observe(kidsVideo); /* começa a carregar um pouco antes */
     }
   }
 
@@ -105,11 +105,36 @@
     });
   }
 
-  /* tenta iniciar o vídeo do hero (autoplay mudo) */
+  /* ------------------------------------------------------------------
+     Vídeo do topo: looping infinito que nunca fica travado.
+     O iPhone pausa vídeos sozinho (modo pouca energia, troca de aba,
+     voltar pelo navegador); aqui ele volta a tocar em todos esses casos.
+     Fora da tela ele pausa (ninguém vê) e retoma ao voltar: poupa bateria.
+     ------------------------------------------------------------------ */
   var heroVideo = doc.querySelector(".hero__video");
   if (heroVideo && !reduceMotion) {
-    var hp = heroVideo.play();
-    if (hp && hp.catch) hp.catch(function () {});
+    var heroNaTela = true;
+    var tocarHero = function () {
+      if (!heroNaTela || doc.hidden || !heroVideo.paused) return;
+      var hp = heroVideo.play();
+      if (hp && hp.catch) hp.catch(function () {});
+    };
+    heroVideo.loop = true;
+    heroVideo.addEventListener("pause", function () { setTimeout(tocarHero, 250); });
+    heroVideo.addEventListener("ended", function () { heroVideo.currentTime = 0; tocarHero(); });
+    doc.addEventListener("visibilitychange", tocarHero);
+    window.addEventListener("pageshow", tocarHero);
+    /* modo pouca energia bloqueia o autoplay até o primeiro toque */
+    ["touchstart", "click", "scroll"].forEach(function (ev) {
+      window.addEventListener(ev, tocarHero, { passive: true, once: true });
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        heroNaTela = entries[0].isIntersecting;
+        if (heroNaTela) tocarHero(); else heroVideo.pause();
+      }).observe(heroVideo);
+    }
+    tocarHero();
   }
 
   /* -------------------------------------- marquee dos famosos (CSS) */
@@ -385,27 +410,42 @@
     }
   };
 
-  var kickoff = function () {
-    if (doc.fonts && doc.fonts.ready) {
-      /* as letras só podem ser quebradas depois das fontes carregarem,
-         senão as quebras de linha saem erradas; se as fontes travarem, a
-         rede de segurança (3,6s) mostra a página sem animação */
-      doc.fonts.ready.then(startGsap);
-    } else {
-      startGsap();
-    }
+  /* ------------------------------------------------------------------
+     Tela de carregamento: sai quando as fontes e o vídeo do topo estão
+     prontos (mínimo 0,7s para não piscar, máximo 3s para não prender).
+     A abertura do GSAP começa enquanto ela some.
+     ------------------------------------------------------------------ */
+  var loader = doc.querySelector(".loader");
+  var inicio = Date.now();
+  var fontesProntas = (doc.fonts && doc.fonts.ready) ? doc.fonts.ready : Promise.resolve();
+  var heroPronto = new Promise(function (ok) {
+    if (!heroVideo || reduceMotion || heroVideo.readyState >= 3) return ok();
+    heroVideo.addEventListener("canplay", ok, { once: true });
+    heroVideo.addEventListener("error", ok, { once: true });
+  });
+  var limite = new Promise(function (ok) { setTimeout(ok, 3000); });
+
+  var tirarLoader = function () {
+    if (!loader) return;
+    loader.classList.add("is-done");
+    /* pausa o brilho e tira do DOM depois do esmaecimento */
+    setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 800);
   };
 
-  if (doc.readyState === "complete") {
-    kickoff();
-  } else {
-    window.addEventListener("load", kickoff);
-  }
+  Promise.race([Promise.all([fontesProntas, heroPronto]), limite]).then(function () {
+    var espera = Math.max(0, 700 - (Date.now() - inicio));
+    setTimeout(function () {
+      tirarLoader();
+      /* as letras só podem ser quebradas depois das fontes carregarem,
+         senão as quebras de linha saem erradas */
+      fontesProntas.then(startGsap);
+    }, espera);
+  });
 
   /* rede de segurança: nada pode ficar invisível */
   setTimeout(function () {
     if (root.classList.contains("gsap-ready")) {
       root.classList.add("anim-failsafe");
     }
-  }, 3600);
+  }, 6000);
 })();

@@ -18,9 +18,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Archivo:wght@400..700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/style.css">
+<!-- a capa do vídeo do topo é a primeira coisa grande da tela: baixa antes -->
+<link rel="preload" as="image" href="img/otim/header-poster.webp" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/style.css?v=3">
 
 <script>
   /* Set the pre-animation state only when we will actually animate.
@@ -30,22 +32,43 @@
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.classList.add('gsap-ready');
         /* rede de segurança independente do main.js: se ele não carregar,
-           em 4s tudo (inclusive os títulos com data-letters) aparece */
+           em 6s tudo (inclusive os títulos com data-letters) aparece */
         setTimeout(function () {
           var r = document.documentElement;
           if (r.classList.contains('gsap-ready')) r.classList.add('anim-failsafe');
-        }, 4000);
+        }, 6000);
       }
     } catch (e) {}
   })();
 </script>
 
-<script defer src="assets/js/vendor/gsap.min.js"></script>
-<script defer src="assets/js/vendor/ScrollTrigger.min.js"></script>
-<script defer src="assets/js/vendor/SplitText.min.js"></script>
-<script defer src="assets/js/main.js"></script>
+<script defer src="assets/js/vendor/gsap.min.js?v=3.13.0"></script>
+<script defer src="assets/js/vendor/ScrollTrigger.min.js?v=3.13.0"></script>
+<script defer src="assets/js/vendor/SplitText.min.js?v=3.13.0"></script>
+<script defer src="assets/js/main.js?v=3"></script>
 </head>
 <body>
+
+<!-- ================= TELA DE CARREGAMENTO =================
+     Só o logo, com um brilho dourado passando. Some quando a página está
+     pronta (main.js) e, por segurança, sozinha em 5s pelo CSS. -->
+<div class="loader" aria-hidden="true">
+  <svg class="loader__logo" viewBox="24 19 2557 1325" focusable="false">
+    <defs>
+      <linearGradient id="loaderGold" gradientUnits="userSpaceOnUse" x1="-1300" y1="0" x2="0" y2="0">
+        <stop offset="0" stop-color="#F4F1EA"/>
+        <stop offset="0.42" stop-color="#F4F1EA"/>
+        <stop offset="0.5" stop-color="#F6D77E"/>
+        <stop offset="0.58" stop-color="#F4F1EA"/>
+        <stop offset="1" stop-color="#F4F1EA"/>
+        <animateTransform class="loader__shine" attributeName="gradientTransform" type="translate"
+                          from="0 0" to="3900 0" dur="1.6s" repeatCount="indefinite"/>
+      </linearGradient>
+    </defs>
+    <path fill="url(#loaderGold)" fill-rule="evenodd" d="M 748 24 C 733 24,683 29,667 31 C 651 33,646 34,635 37 C 631 38,626 39,624 39 C 621 40,617 41,616 42 C 614 42,612 43,611 43 C 610 43,605 44,600 46 C 584 51,570 56,566 57 C 561 58,548 63,536 68 C 530 71,525 73,525 73 C 524 73,520 75,515 77 C 510 80,504 82,503 83 C 502 83,499 84,498 85 C 497 86,491 89,486 91 C 477 96,461 106,448 114 C 444 117,440 119,439 120 C 426 127,373 176,360 192 C 348 207,346 210,344 213 C 343 215,340 220,337 225 C 330 234,317 260,313 270 C 311 274,310 278,309 279 C 308 281,305 289,301 301 C 293 325,289 370,292 400 C 295 434,307 472,322 493 C 324 497,326 500,326 501 C 326 501,341 524,345 528 C 346 530,349 534,351 536 C 358 545,361 548,368 556 C 372 560,376 564,376 565 C 377 566,379 568,381 569 C 383 570,388 575,393 580 C 398 585,403 590,405 591 C 407 593,413 598,417 602 C 422 605,427 610,429 611 C 431 612,437 617,444 621 C 450 626,459 632,464 635 C 468 638,475 643,478 645 C 481 648,485 651,487 652 C 489 652,494 656,498 658 C 519 672,524 675,530 678 C 533 680,538 683,540 684 C 545 688,554 693,572 703 C 579 706,589 711,595 714 C 601 718,608 721,610 722 C 613 724,616 725,618 727 C 620 728,627 732,634 736 C 649 743,651 744,660 750 C 664 752,670 755,673 757 C 676 758,682 762,686 764 C 697 771,713 781,714 781 C 714 781,718 783,722 786 C 726 789,733 793,736 795 C 740 797,744 799,745 800 C 746 801,747 802,747 802 C 749 802,758 808,763 813 C 765 815,770 818,774 821 C 778 823,783 827,785 829 C 787 831,791 835,794 836 C 808 846,837 875,847 890 C 848 892,852 897,855 900 C 873 922,889 960,893 990 C 894 1000,893 1042,892 1047 C 892 1049,890 1057,888 1064 C 885 1081,881 1093,874 1106 C 874 1107,871 1112,870 1117 C 867 1123,863 1131,857 1140 C 851 1148,847 1156,846 1157 C 846 1158,844 1160,843 1162 C 841 1164,840 1166,840 1166 C 840 1169,805 1206,796 1213 C 794 1214,790 1218,786 1221 C 783 1224,777 1229,772 1231 C 768 1234,763 1237,761 1238 C 760 1240,757 1241,755 1242 C 754 1243,750 1245,748 1247 C 743 1250,709 1267,708 1267 C 708 1267,706 1268,705 1269 C 701 1272,660 1288,631 1298 C 592 1312,567 1315,509 1317 C 454 1318,405 1314,369 1304 C 343 1298,338 1297,334 1295 C 332 1295,328 1294,326 1293 C 325 1292,320 1291,316 1290 C 304 1286,299 1284,291 1280 C 287 1279,284 1277,283 1277 C 282 1277,280 1276,278 1275 C 276 1274,270 1271,266 1269 C 253 1263,229 1249,224 1244 C 223 1243,220 1241,217 1239 C 201 1228,162 1191,153 1176 C 150 1173,147 1169,145 1167 C 143 1164,142 1162,142 1162 C 142 1161,140 1159,139 1156 C 131 1145,128 1141,122 1128 C 116 1116,115 1114,113 1110 C 107 1100,94 1053,91 1032 C 86 1000,86 945,91 918 C 92 915,93 907,94 901 C 96 888,101 872,104 862 C 112 841,113 837,115 834 C 116 833,117 830,118 828 C 119 826,120 824,120 823 C 121 822,124 817,126 812 C 128 806,131 802,132 801 C 132 800,134 798,135 796 C 136 794,137 792,138 792 C 139 792,140 789,142 786 C 144 783,146 779,147 777 C 149 776,150 773,151 772 C 152 770,160 760,167 753 C 173 747,199 724,207 719 C 220 710,234 702,237 702 C 237 702,241 700,245 699 C 260 691,292 685,312 685 C 346 685,382 695,399 709 C 401 712,406 715,408 717 C 411 719,415 724,417 727 C 419 730,422 735,424 737 C 427 742,429 745,434 760 C 442 781,441 813,431 843 C 428 854,427 856,418 872 C 411 885,396 901,386 908 C 375 916,368 920,368 920 C 367 920,364 921,361 922 C 345 929,338 932,334 933 C 309 938,303 940,303 941 C 303 941,302 944,301 947 C 297 959,296 982,299 996 C 304 1014,315 1037,325 1048 C 326 1050,329 1054,331 1057 C 337 1065,361 1085,365 1085 C 366 1085,371 1087,376 1089 C 380 1092,386 1094,388 1094 C 389 1095,391 1096,392 1096 C 394 1098,408 1102,417 1103 C 420 1104,426 1104,428 1105 C 446 1108,492 1104,506 1099 C 509 1097,513 1096,515 1095 C 517 1095,519 1094,520 1094 C 520 1093,523 1092,526 1091 C 536 1088,548 1082,552 1079 C 568 1069,587 1053,597 1041 C 600 1038,605 1032,609 1027 C 613 1023,616 1018,616 1018 C 616 1017,619 1013,622 1007 C 629 995,636 982,636 980 C 636 979,637 976,638 972 C 644 958,649 925,649 908 C 649 886,642 851,635 834 C 630 825,630 825,627 820 C 625 817,623 813,622 810 C 620 805,613 795,611 793 C 610 792,608 790,607 789 C 603 779,575 750,562 742 C 556 737,543 727,540 724 C 539 723,534 720,530 718 C 525 716,521 713,520 713 C 519 712,517 711,515 710 C 513 709,510 707,509 707 C 506 705,487 696,482 695 C 470 691,457 686,456 685 C 452 683,426 678,403 674 C 356 665,302 667,256 677 C 253 678,247 680,243 680 C 239 681,232 684,228 686 C 219 689,210 693,200 696 C 194 698,175 708,168 713 C 165 714,163 716,162 717 C 160 717,157 719,154 721 C 151 723,149 724,149 725 C 149 725,148 727,146 728 C 123 742,100 764,85 786 C 82 790,79 793,78 795 C 74 798,68 807,64 814 C 61 818,58 824,55 827 C 50 835,44 848,41 857 C 39 861,36 868,34 873 C 29 885,28 891,28 904 C 28 914,28 915,30 916 C 32 917,32 918,32 932 C 32 946,32 947,34 948 C 36 949,36 950,36 960 C 36 970,36 971,38 972 C 40 973,40 974,40 984 C 40 994,40 995,42 996 C 44 997,44 998,44 1006 C 44 1014,44 1015,46 1016 C 48 1017,48 1018,48 1026 C 48 1034,48 1035,50 1036 C 52 1037,52 1038,52 1046 C 52 1054,52 1055,54 1056 C 56 1057,56 1058,56 1064 C 56 1070,56 1071,58 1072 C 60 1073,60 1074,60 1080 C 60 1086,60 1087,62 1088 C 64 1089,64 1090,64 1096 C 64 1102,64 1103,66 1104 C 68 1105,68 1106,68 1112 C 68 1118,68 1119,70 1120 C 72 1121,72 1122,72 1126 C 72 1130,72 1131,74 1132 C 76 1133,76 1134,76 1138 C 76 1142,76 1143,78 1144 C 80 1145,80 1146,80 1152 C 80 1158,80 1159,82 1160 C 84 1161,84 1162,84 1166 C 84 1170,84 1171,86 1172 C 87 1173,88 1174,88 1177 C 88 1180,89 1182,90 1183 C 91 1184,92 1186,93 1187 C 97 1194,124 1222,134 1230 C 138 1233,142 1236,144 1237 C 152 1245,155 1247,161 1250 C 165 1252,168 1255,168 1255 C 168 1256,170 1257,171 1258 C 173 1258,176 1260,178 1261 C 179 1263,182 1265,184 1266 C 186 1266,189 1268,190 1270 C 192 1271,195 1272,196 1273 C 197 1273,199 1274,200 1274 C 201 1275,222 1285,232 1290 C 233 1290,239 1293,245 1296 C 251 1298,259 1301,264 1303 C 268 1305,273 1307,276 1307 C 280 1309,289 1312,308 1317 C 316 1318,323 1320,326 1321 C 333 1323,348 1326,354 1327 C 358 1327,364 1329,369 1329 C 433 1340,502 1343,572 1336 C 601 1333,644 1326,649 1323 C 649 1322,656 1320,664 1318 C 672 1316,679 1315,680 1314 C 682 1314,686 1312,690 1311 C 694 1310,700 1308,702 1306 C 705 1305,715 1301,724 1298 C 732 1295,741 1291,744 1290 C 746 1289,748 1288,749 1288 C 749 1288,755 1286,760 1283 C 766 1280,771 1278,772 1278 C 772 1278,777 1276,781 1274 C 799 1266,807 1262,809 1261 C 810 1260,818 1256,825 1253 C 833 1249,840 1245,842 1244 C 843 1242,847 1240,850 1238 C 858 1233,859 1232,862 1231 C 865 1229,878 1222,889 1213 C 891 1212,894 1210,895 1209 C 897 1208,901 1205,905 1202 C 909 1199,916 1194,920 1191 C 924 1189,930 1184,933 1182 C 936 1179,939 1176,941 1175 C 949 1170,1007 1112,1014 1102 C 1017 1097,1022 1091,1025 1088 C 1028 1084,1031 1080,1033 1078 C 1034 1076,1037 1072,1039 1070 C 1043 1064,1048 1057,1053 1049 C 1054 1047,1059 1040,1063 1034 C 1069 1024,1075 1012,1075 1010 C 1075 1010,1077 1005,1080 1000 C 1083 995,1086 989,1086 988 C 1087 987,1088 985,1089 984 C 1090 982,1091 980,1095 968 C 1097 964,1098 960,1099 959 C 1100 957,1105 945,1109 930 C 1113 916,1114 914,1119 918 C 1121 920,1122 922,1123 923 C 1125 929,1137 946,1150 960 C 1151 962,1155 966,1157 968 C 1159 971,1165 976,1169 979 C 1174 983,1181 988,1185 992 C 1190 996,1198 1001,1204 1005 C 1210 1008,1215 1012,1216 1012 C 1221 1015,1234 1022,1239 1023 C 1242 1024,1248 1026,1252 1027 C 1255 1029,1261 1031,1264 1031 C 1266 1032,1271 1034,1274 1035 C 1299 1044,1333 1047,1375 1045 C 1405 1044,1425 1040,1460 1030 C 1467 1027,1474 1025,1476 1025 C 1488 1022,1537 999,1544 993 C 1545 992,1549 989,1553 987 C 1557 985,1563 981,1566 978 C 1568 976,1573 973,1576 971 C 1579 969,1585 964,1590 960 C 1594 956,1600 951,1602 950 C 1615 938,1644 907,1651 896 C 1654 892,1658 886,1661 883 C 1663 880,1666 876,1667 874 C 1668 870,1671 867,1672 869 C 1672 869,1672 884,1672 902 C 1672 946,1674 964,1684 982 C 1685 983,1687 987,1688 989 C 1695 1002,1712 1020,1723 1025 C 1759 1043,1781 1048,1822 1047 C 1863 1045,1895 1035,1918 1016 C 1922 1013,1926 1010,1927 1009 C 1931 1006,1955 980,1959 974 C 1961 972,1964 967,1967 964 C 1971 959,1974 954,1977 948 C 1979 945,1981 940,1984 937 C 1987 932,1991 925,2000 905 C 2002 901,2004 897,2004 896 C 2007 891,2014 877,2015 874 C 2016 869,2021 857,2022 856 C 2022 855,2023 853,2023 851 C 2024 849,2026 844,2029 839 C 2031 833,2033 829,2033 828 C 2033 827,2033 826,2034 825 C 2035 825,2037 822,2038 818 C 2045 803,2044 819,2036 858 C 2035 862,2032 873,2030 882 C 2018 927,2019 947,2035 978 C 2045 1000,2061 1016,2080 1026 C 2099 1035,2106 1038,2112 1039 C 2116 1040,2119 1041,2121 1042 C 2122 1042,2130 1044,2138 1045 C 2168 1049,2209 1048,2230 1041 C 2235 1040,2241 1039,2243 1038 C 2245 1038,2247 1036,2248 1036 C 2250 1035,2251 1034,2252 1034 C 2253 1034,2258 1032,2264 1028 C 2270 1025,2276 1023,2276 1023 C 2277 1023,2281 1020,2285 1017 C 2290 1014,2295 1011,2296 1010 C 2306 1004,2330 984,2345 971 C 2349 968,2353 964,2355 962 C 2357 961,2361 957,2363 953 C 2366 950,2372 944,2376 940 C 2381 935,2386 930,2388 928 C 2389 925,2393 921,2395 918 C 2398 915,2401 912,2402 911 C 2403 910,2406 905,2410 901 C 2415 895,2432 871,2435 866 C 2436 865,2437 863,2437 863 C 2438 862,2440 860,2442 856 C 2446 849,2456 835,2458 832 C 2462 827,2469 815,2472 810 C 2473 808,2476 803,2478 799 C 2480 795,2483 790,2484 788 C 2486 786,2489 780,2491 775 C 2494 770,2496 766,2497 764 C 2497 763,2498 762,2498 761 C 2500 760,2507 745,2511 732 C 2513 727,2517 718,2520 712 C 2523 707,2528 694,2533 683 C 2546 648,2546 650,2556 615 C 2558 609,2560 603,2560 602 C 2564 591,2570 562,2573 546 C 2576 523,2578 454,2575 435 C 2572 415,2566 391,2562 385 C 2561 385,2559 381,2557 377 C 2549 360,2528 335,2516 327 C 2515 326,2512 325,2511 324 C 2508 321,2492 313,2483 311 C 2478 309,2474 308,2473 307 C 2458 302,2427 303,2406 310 C 2385 316,2359 334,2347 349 C 2340 359,2332 374,2330 382 C 2329 384,2327 390,2326 394 C 2321 414,2321 441,2327 459 C 2328 463,2329 467,2329 467 C 2329 469,2340 484,2344 488 C 2352 497,2361 504,2367 507 C 2370 508,2374 510,2376 511 C 2378 512,2382 512,2392 513 L 2406 513 2408 510 C 2418 497,2419 496,2428 488 C 2438 479,2446 475,2459 471 C 2469 468,2484 467,2491 468 C 2508 470,2528 483,2534 496 C 2535 498,2537 502,2538 503 C 2544 514,2545 521,2546 542 C 2546 563,2546 566,2541 588 C 2535 611,2531 626,2529 632 C 2528 634,2526 638,2525 642 C 2524 648,2522 651,2514 672 C 2512 678,2509 685,2508 688 C 2508 691,2506 694,2506 695 C 2505 696,2504 698,2504 700 C 2503 702,2502 704,2501 705 C 2501 706,2498 711,2496 716 C 2494 721,2490 728,2489 732 C 2482 744,2474 761,2473 761 C 2472 762,2472 763,2472 764 C 2472 767,2462 785,2454 796 C 2452 800,2448 807,2445 812 C 2442 818,2439 824,2438 825 C 2436 826,2434 829,2433 831 C 2431 836,2419 854,2414 860 C 2412 863,2408 868,2405 872 C 2403 876,2398 881,2396 885 C 2393 888,2388 894,2386 897 C 2383 901,2380 904,2380 904 C 2380 904,2377 907,2374 910 C 2371 914,2367 919,2364 922 C 2362 924,2358 929,2355 932 C 2353 935,2347 941,2343 945 C 2338 949,2334 953,2333 954 C 2331 957,2317 971,2316 971 C 2316 971,2311 974,2306 978 C 2300 981,2295 984,2295 984 C 2294 984,2289 986,2285 988 C 2254 1004,2225 1000,2219 978 C 2216 968,2216 954,2217 936 C 2218 927,2219 914,2220 907 C 2221 900,2221 892,2222 891 C 2222 889,2223 881,2225 872 C 2228 849,2231 831,2233 824 C 2234 821,2236 809,2240 786 C 2242 778,2244 768,2245 764 C 2245 761,2247 751,2248 743 C 2251 730,2252 723,2255 704 C 2256 700,2258 691,2259 684 C 2263 667,2264 662,2266 649 C 2266 643,2268 636,2268 634 C 2277 587,2279 569,2276 546 C 2275 536,2270 520,2266 513 C 2265 511,2264 508,2264 508 C 2264 507,2257 496,2254 494 C 2253 492,2251 490,2249 489 C 2247 487,2244 485,2242 483 C 2238 479,2226 474,2216 471 C 2205 467,2182 465,2160 465 C 2143 465,2107 468,2099 470 C 2096 471,2091 472,2088 473 C 2079 474,2077 477,2079 485 C 2086 509,2087 519,2085 545 C 2084 563,2081 586,2079 600 C 2078 602,2077 611,2076 618 C 2074 632,2072 643,2066 665 C 2061 683,2057 698,2055 706 C 2054 713,2051 726,2049 730 C 2047 735,2040 760,2037 769 C 2035 778,2032 785,2028 795 C 2026 799,2023 806,2022 811 C 2020 816,2018 822,2017 824 C 2017 826,2015 831,2014 835 C 2013 839,2009 848,2005 855 C 2002 862,1998 869,1997 871 C 1995 880,1987 897,1982 906 C 1979 911,1977 915,1977 916 C 1977 917,1976 918,1976 919 C 1975 920,1973 923,1971 926 C 1970 929,1966 936,1962 940 C 1959 944,1955 950,1953 953 C 1948 962,1933 974,1920 980 C 1910 985,1906 986,1898 986 C 1879 986,1868 976,1866 954 C 1865 944,1865 925,1866 915 C 1867 904,1872 868,1873 859 C 1874 855,1875 846,1876 840 C 1876 833,1877 826,1878 824 C 1879 821,1880 813,1884 791 C 1885 788,1886 783,1887 780 C 1888 774,1893 747,1896 732 C 1899 713,1902 694,1905 680 C 1907 671,1908 663,1908 662 C 1909 661,1910 654,1910 648 C 1911 642,1912 634,1913 632 C 1913 630,1914 623,1915 616 C 1916 610,1916 603,1917 601 C 1918 599,1919 591,1920 584 C 1921 577,1922 569,1923 566 C 1930 528,1928 505,1914 487 C 1907 478,1902 475,1890 470 C 1876 465,1850 463,1828 466 C 1806 469,1801 469,1798 470 C 1796 471,1790 472,1784 473 C 1772 475,1767 476,1752 482 C 1747 483,1742 485,1741 485 C 1740 485,1738 486,1736 486 C 1734 487,1729 489,1725 490 C 1716 493,1706 498,1701 502 C 1697 506,1697 508,1705 510 C 1718 515,1720 517,1724 520 C 1727 522,1728 525,1729 528 C 1732 538,1732 537,1720 600 C 1716 617,1713 633,1712 636 C 1710 645,1708 645,1705 635 C 1704 632,1702 627,1701 624 C 1699 622,1697 616,1695 612 C 1693 608,1691 604,1691 603 C 1691 602,1677 579,1675 576 C 1673 574,1672 572,1672 572 C 1672 571,1671 570,1670 569 C 1669 568,1668 566,1666 564 C 1656 548,1619 512,1612 512 C 1612 512,1611 511,1610 510 C 1609 510,1605 507,1602 505 C 1598 503,1593 501,1592 500 C 1586 495,1581 493,1574 490 C 1562 486,1556 484,1548 481 C 1542 478,1525 474,1508 471 C 1484 466,1419 465,1394 468 C 1373 472,1348 478,1325 487 C 1321 489,1316 490,1315 490 C 1313 491,1299 498,1291 502 C 1288 504,1285 505,1284 505 C 1282 505,1259 517,1256 520 C 1255 521,1251 524,1249 526 C 1247 527,1243 530,1240 531 C 1226 541,1222 544,1218 548 C 1215 550,1211 555,1208 557 C 1200 564,1190 574,1182 583 C 1178 588,1174 592,1174 592 C 1173 592,1161 606,1159 610 C 1158 611,1155 615,1152 619 C 1149 624,1147 627,1147 628 C 1147 628,1146 630,1145 631 C 1142 634,1138 640,1132 652 C 1129 658,1125 666,1123 670 C 1119 677,1111 694,1110 701 C 1109 705,1107 708,1105 708 C 1104 708,1103 707,1102 702 C 1100 691,1088 666,1081 655 C 1079 653,1075 647,1073 643 C 1071 639,1068 634,1067 633 C 1066 632,1064 629,1063 627 C 1055 616,1044 602,1038 596 C 1035 592,1030 587,1028 585 C 1026 583,1023 580,1022 579 C 1015 572,1010 568,1007 565 C 1005 563,1000 559,996 555 C 992 552,987 548,985 546 C 982 543,979 541,968 533 C 961 528,953 523,950 520 C 949 519,944 515,939 513 C 934 510,928 506,925 504 C 922 503,918 500,916 499 C 914 498,910 496,908 494 C 906 492,901 490,898 488 C 894 486,889 483,887 482 C 881 477,866 469,852 462 C 846 459,839 455,838 455 C 837 454,829 450,822 447 C 814 443,808 440,808 439 C 807 438,773 421,771 421 C 771 421,769 420,767 418 C 765 417,759 414,754 411 C 749 409,745 406,744 406 C 743 405,742 404,740 404 C 739 403,734 401,730 398 C 725 396,718 392,714 390 C 709 388,703 384,699 382 C 695 379,690 376,687 375 C 684 373,681 371,680 370 C 679 370,675 367,671 365 C 668 363,661 359,656 356 C 651 353,646 349,644 349 C 640 346,625 335,618 329 C 614 326,610 323,608 321 C 603 317,585 296,583 292 C 582 290,579 287,578 284 C 573 277,562 255,561 249 C 561 246,560 241,559 238 C 553 210,561 160,574 142 C 575 141,577 137,579 134 C 584 123,586 121,588 118 C 590 117,595 111,600 106 C 605 100,609 96,609 96 C 610 96,612 94,614 92 C 619 88,625 83,632 79 C 636 77,640 75,642 73 C 643 72,645 71,646 71 C 647 70,650 69,652 67 C 661 62,664 61,681 56 C 688 53,706 49,713 48 C 717 47,722 47,726 46 C 741 44,776 44,792 46 C 799 47,807 49,809 50 C 810 50,813 51,814 51 C 818 51,838 58,843 62 C 846 63,850 67,854 69 C 857 72,862 76,865 78 C 870 82,872 85,880 95 C 884 100,894 117,897 125 C 908 154,908 200,898 229 C 890 252,872 276,857 286 C 855 287,852 289,850 291 C 844 295,837 298,828 302 C 815 306,810 314,808 331 C 806 350,810 370,820 388 C 830 405,845 422,857 430 C 861 433,867 437,870 439 C 875 443,887 448,896 450 C 898 451,902 452,904 452 C 911 454,950 455,960 454 C 973 453,981 451,987 449 C 990 448,995 446,998 445 C 1010 442,1045 424,1047 420 C 1048 419,1058 411,1063 408 C 1074 401,1103 367,1111 352 C 1112 348,1114 344,1115 343 C 1117 340,1126 318,1127 316 C 1127 314,1129 309,1130 306 C 1136 282,1138 244,1133 216 C 1130 200,1121 177,1111 158 C 1104 147,1102 144,1100 142 C 1099 141,1097 137,1095 134 C 1089 126,1077 114,1057 96 C 1047 88,1039 82,1025 74 C 1021 72,1016 69,1012 67 C 1007 63,990 56,976 51 C 973 50,970 48,969 47 C 967 46,937 36,928 34 C 925 34,917 32,912 31 C 899 29,894 28,879 27 C 872 26,861 25,856 25 C 845 24,762 23,748 24 M 1444 478 C 1437 479,1428 482,1424 485 C 1422 486,1421 487,1420 487 C 1418 487,1387 516,1385 521 C 1383 525,1377 535,1376 536 C 1374 537,1364 556,1362 564 C 1352 591,1341 621,1340 626 C 1340 629,1339 631,1339 632 C 1338 633,1336 640,1335 648 C 1333 655,1331 663,1330 664 C 1326 674,1321 700,1317 722 C 1315 733,1313 744,1313 748 C 1311 757,1309 765,1308 777 C 1307 783,1306 790,1305 792 C 1299 827,1296 946,1301 973 C 1306 1002,1321 1023,1340 1029 C 1353 1032,1375 1031,1383 1025 C 1384 1024,1388 1023,1390 1021 C 1395 1019,1413 1002,1416 997 C 1417 995,1419 991,1421 988 C 1424 985,1426 981,1428 979 C 1429 978,1430 975,1431 974 C 1434 971,1441 959,1442 956 C 1442 955,1444 949,1446 944 C 1454 928,1463 903,1467 888 C 1468 886,1469 881,1470 876 C 1473 869,1475 858,1487 810 C 1493 783,1497 764,1498 752 C 1498 749,1500 737,1502 724 C 1504 712,1505 699,1506 694 C 1507 689,1508 678,1509 669 C 1517 600,1513 540,1497 511 C 1494 504,1486 493,1481 490 C 1473 483,1456 476,1450 477 C 1449 477,1446 478,1444 478"/>
+  </svg>
+</div>
+<noscript><style>.loader { display: none; }</style></noscript>
 
 <a class="skip-link" href="#inicio">Pular para o conteúdo</a>
 
@@ -80,9 +103,9 @@
   <!-- ================= HERO ================= -->
   <section class="hero" aria-label="Apresentação">
     <div class="hero__media">
-      <video class="hero__video" autoplay muted loop playsinline preload="metadata"
-             poster="img/corte-1.jpg">
-        <source src="videos/header.mp4" type="video/mp4">
+      <video class="hero__video" autoplay muted loop playsinline preload="auto"
+             poster="img/otim/header-poster.webp" disableremoteplayback>
+        <source src="videos/header.mp4?v=2" type="video/mp4">
       </video>
       <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__grain" aria-hidden="true"></div>
@@ -145,9 +168,10 @@
 
     <div class="wrap kids__inner">
       <div class="kids__media kids__layer" data-parallax="media">
-        <video class="kids__video" autoplay muted loop playsinline preload="none"
-               poster="img/corte-kids-1.jpg">
-          <source src="videos/corte-kids.mp4" type="video/mp4">
+        <!-- sem autoplay: só baixa quando chega perto da tela (main.js) -->
+        <video class="kids__video" muted loop playsinline preload="none"
+               poster="img/otim/corte-kids-1-960.webp">
+          <source src="videos/corte-kids.mp4?v=2" type="video/mp4">
         </video>
         <!-- O navegador só deixa tocar com som depois de um toque da pessoa -->
         <button class="sound-toggle" type="button" aria-pressed="false">
@@ -205,7 +229,7 @@
 
       <ul class="cuts__grid">
         <li class="cut-card cut-card--wide" data-cat="signature" data-reveal>
-          <img src="img/corte-1.jpg" alt="Barbeiro finalizando um degradê com tesoura em um cliente." loading="lazy" decoding="async" width="1080" height="1080">
+          <img src="img/otim/corte-1-960.webp" srcset="img/otim/corte-1-480.webp 480w, img/otim/corte-1-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 100vw, 66vw" alt="Barbeiro finalizando um degradê com tesoura em um cliente." loading="lazy" decoding="async" width="1080" height="1080">
           <div class="cut-card__body">
             <span class="cut-card__tag">Assinatura</span>
             <h3>Degradê navalhado</h3>
@@ -213,7 +237,7 @@
           </div>
         </li>
         <li class="cut-card" data-cat="classic" data-reveal>
-          <img src="img/barba.jpg" alt="Cliente recebendo alinhamento de barba com máquina." loading="lazy" decoding="async" width="1080" height="720">
+          <img src="img/otim/barba-960.webp" srcset="img/otim/barba-480.webp 480w, img/otim/barba-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 50vw, 33vw" alt="Cliente recebendo alinhamento de barba com máquina." loading="lazy" decoding="async" width="1080" height="720">
           <div class="cut-card__body">
             <span class="cut-card__tag">Barba</span>
             <h3>Barba desenhada</h3>
@@ -221,7 +245,7 @@
           </div>
         </li>
         <li class="cut-card" data-cat="signature" data-reveal>
-          <img src="img/famoso-2.jpg" alt="Cliente atleta após o corte, em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
+          <img src="img/otim/famoso-2-960.webp" srcset="img/otim/famoso-2-480.webp 480w, img/otim/famoso-2-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 50vw, 33vw" alt="Cliente atleta após o corte, em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
           <div class="cut-card__body">
             <span class="cut-card__tag">Assinatura</span>
             <h3>Social com textura</h3>
@@ -229,7 +253,7 @@
           </div>
         </li>
         <li class="cut-card" data-cat="classic" data-reveal>
-          <img src="img/famoso-4.jpg" alt="Cliente após corte raspado, conversando com o barbeiro." loading="lazy" decoding="async" width="1080" height="1350">
+          <img src="img/otim/famoso-4-960.webp" srcset="img/otim/famoso-4-480.webp 480w, img/otim/famoso-4-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 50vw, 33vw" alt="Cliente após corte raspado, conversando com o barbeiro." loading="lazy" decoding="async" width="1080" height="1350">
           <div class="cut-card__body">
             <span class="cut-card__tag">Clássico</span>
             <h3>Máquina baixa</h3>
@@ -237,7 +261,7 @@
           </div>
         </li>
         <li class="cut-card" data-cat="signature" data-reveal>
-          <img src="img/corte-kids-1.jpg" alt="Criança sorrindo em cadeira-carrinho após o corte." loading="lazy" decoding="async" width="1080" height="1080">
+          <img src="img/otim/corte-kids-1-960.webp" srcset="img/otim/corte-kids-1-480.webp 480w, img/otim/corte-kids-1-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 50vw, 33vw" alt="Criança sorrindo em cadeira-carrinho após o corte." loading="lazy" decoding="async" width="1080" height="1080">
           <div class="cut-card__body">
             <span class="cut-card__tag">Kids</span>
             <h3>Primeiro corte</h3>
@@ -245,7 +269,7 @@
           </div>
         </li>
         <li class="cut-card" data-cat="classic" data-reveal>
-          <img src="img/famoso-7.jpg" alt="Cliente e barbeiro em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
+          <img src="img/otim/famoso-7-960.webp" srcset="img/otim/famoso-7-480.webp 480w, img/otim/famoso-7-960.webp 960w" sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 860px) 50vw, 33vw" alt="Cliente e barbeiro em frente à fachada da Sow." loading="lazy" decoding="async" width="1080" height="1350">
           <div class="cut-card__body">
             <span class="cut-card__tag">Clássico</span>
             <h3>Corte na régua</h3>
@@ -273,18 +297,18 @@
 
     <div class="fame__track" data-marquee>
       <ul class="fame__row">
-        <li class="fame-card"><img src="img/famoso-3.jpg" alt="Marcos Rocha, jogador de futebol, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
-        <li class="fame-card"><img src="img/famoso-1.jpg" alt="Henry Klauss, ilusionista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
-        <li class="fame-card"><img src="img/famoso-6.jpg" alt="Tirullipa, humorista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
-        <li class="fame-card"><img src="img/famoso-4.jpg" alt="Bam Bam, lutador, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
-        <li class="fame-card"><img src="img/famoso-2.jpg" alt="Atleta profissional com a camisa do time na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-3-960.webp" srcset="img/otim/famoso-3-480.webp 480w, img/otim/famoso-3-960.webp 960w" sizes="300px" alt="Marcos Rocha, jogador de futebol, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-1-960.webp" srcset="img/otim/famoso-1-480.webp 480w, img/otim/famoso-1-960.webp 960w" sizes="300px" alt="Henry Klauss, ilusionista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-6-960.webp" srcset="img/otim/famoso-6-480.webp 480w, img/otim/famoso-6-960.webp 960w" sizes="300px" alt="Tirullipa, humorista, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-4-960.webp" srcset="img/otim/famoso-4-480.webp 480w, img/otim/famoso-4-960.webp 960w" sizes="300px" alt="Bam Bam, lutador, na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-2-960.webp" srcset="img/otim/famoso-2-480.webp 480w, img/otim/famoso-2-960.webp 960w" sizes="300px" alt="Atleta profissional com a camisa do time na Sow." loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
       </ul>
       <ul class="fame__row" aria-hidden="true">
-        <li class="fame-card"><img src="img/famoso-3.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
-        <li class="fame-card"><img src="img/famoso-1.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
-        <li class="fame-card"><img src="img/famoso-6.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
-        <li class="fame-card"><img src="img/famoso-4.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
-        <li class="fame-card"><img src="img/famoso-2.jpg" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-3-960.webp" srcset="img/otim/famoso-3-480.webp 480w, img/otim/famoso-3-960.webp 960w" sizes="300px" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@marcosrocha2oficial · atleta</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-1-960.webp" srcset="img/otim/famoso-1-480.webp 480w, img/otim/famoso-1-960.webp 960w" sizes="300px" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@henryeklauss · ilusionista</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-6-960.webp" srcset="img/otim/famoso-6-480.webp 480w, img/otim/famoso-6-960.webp 960w" sizes="300px" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@tirullipa · humorista</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-4-960.webp" srcset="img/otim/famoso-4-480.webp 480w, img/otim/famoso-4-960.webp 960w" sizes="300px" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>@bambamoficial · lutador</span></li>
+        <li class="fame-card"><img src="img/otim/famoso-2-960.webp" srcset="img/otim/famoso-2-480.webp 480w, img/otim/famoso-2-960.webp 960w" sizes="300px" alt="" loading="lazy" decoding="async" width="1040" height="1300"><span>Atleta profissional</span></li>
       </ul>
     </div>
   </section>
@@ -431,12 +455,12 @@
       </header>
 
       <ul class="ig__grid">
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-7.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/corte-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-3.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/barba.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/corte-kids-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
-        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/famoso-1.jpg" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/famoso-7-960.webp" srcset="img/otim/famoso-7-480.webp 480w, img/otim/famoso-7-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/corte-1-960.webp" srcset="img/otim/corte-1-480.webp 480w, img/otim/corte-1-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/famoso-3-960.webp" srcset="img/otim/famoso-3-480.webp 480w, img/otim/famoso-3-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/barba-960.webp" srcset="img/otim/barba-480.webp 480w, img/otim/barba-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/corte-kids-1-960.webp" srcset="img/otim/corte-kids-1-480.webp 480w, img/otim/corte-kids-1-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
+        <li><a href="https://instagram.com/espacosow" target="_blank" rel="noopener"><img src="img/otim/famoso-1-960.webp" srcset="img/otim/famoso-1-480.webp 480w, img/otim/famoso-1-960.webp 960w" sizes="(max-width: 1000px) 33vw, 16vw" alt="Publicação do Instagram da Sow." loading="lazy" decoding="async" width="800" height="800"></a></li>
       </ul>
 
       <a class="btn btn--ghost" href="https://instagram.com/espacosow" target="_blank" rel="noopener">
