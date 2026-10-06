@@ -11,8 +11,13 @@
   --c-surface-2:   #1B1B1E;
   --c-text:        #F4F1EA;
   --c-text-dim:    #A29B90;
-  --c-accent:      #C9A15B;   /* latão / dourado escovado */
-  --c-accent-2:    #E2BE78;
+  --c-accent:      #E3B341;   /* ouro vivo (rótulos, ícones, bordas) */
+  --c-accent-2:    #F6D77E;   /* reflexo do ouro (preços, links) */
+  --c-accent-ink:  #1F1604;   /* texto sobre o ouro */
+  /* Ouro metálico: escuro, ouro, reflexo claro, ouro, escuro.
+     Usado só onde a cor precisa brilhar: botão principal, selos e destaques. */
+  --gold-metal: linear-gradient(115deg, #A8771C 0%, #E3B341 26%, #FCE7A6 46%, #E9BC4E 62%, #B07F22 100%);
+  --gold-glow: 0 10px 28px -10px rgba(227, 179, 65, 0.6);
   --c-line:        rgba(244, 241, 234, 0.10);
   --c-line-strong: rgba(244, 241, 234, 0.22);
 
@@ -72,7 +77,7 @@ img, video { height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
 ul { list-style: none; padding: 0; }
-::selection { background: var(--c-accent); color: #1a1305; }
+::selection { background: var(--c-accent); color: var(--c-accent-ink); }
 
 :focus-visible {
   outline: 2px solid var(--c-accent-2);
@@ -86,6 +91,9 @@ ul { list-style: none; padding: 0; }
   max-width: var(--maxw);
   margin-inline: auto;
   padding-inline: var(--gutter);
+  /* iPhone deitado: o texto não fica embaixo do notch */
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
 }
 
 .wrap > *,
@@ -110,16 +118,26 @@ ul { list-style: none; padding: 0; }
   top: 12px; left: 12px;
   z-index: 200;
   background: var(--c-accent);
-  color: #1a1305;
+  color: var(--c-accent-ink);
   padding: 10px 16px;
   border-radius: 8px;
   font-weight: 600;
 }
 
-.u-accent { color: var(--c-accent); }
+.u-accent,
+.hero__line--accent {
+  color: var(--c-accent-2); /* reserva se o recorte do degradê não existir */
+  background-image: var(--gold-metal);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* o itálico passa da caixa; espaço para o degradê cobrir a última letra */
+  padding-right: 0.08em;
+}
+.nowrap { white-space: nowrap; }
 .u-muted { color: var(--c-text-dim); }
 
-.prose { max-width: 60ch; color: var(--c-text-dim); }
+.prose { max-width: 60ch; color: var(--c-text-dim); text-wrap: pretty; }
 .prose strong { color: var(--c-text); font-weight: 600; }
 
 /* ---------------------------------------------------------------- icons */
@@ -138,7 +156,7 @@ ul { list-style: none; padding: 0; }
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-accent);
   margin-bottom: var(--s-2);
@@ -151,6 +169,7 @@ ul { list-style: none; padding: 0; }
   line-height: 1.04;
   letter-spacing: -0.015em;
   font-size: clamp(2.1rem, 6vw, 3.6rem);
+  text-wrap: balance;
 }
 
 /* -------------------------------------------------------------- buttons */
@@ -182,11 +201,23 @@ ul { list-style: none; padding: 0; }
 .btn:active { transform: translateY(0) scale(0.98); }
 
 .btn--solid {
-  --btn-bg: var(--c-accent);
-  --btn-fg: #1a1305;
-  --btn-bd: var(--c-accent);
+  --btn-fg: var(--c-accent-ink);
+  --btn-bd: transparent;
+  background-image: var(--gold-metal);
+  background-size: 220% 100%;
+  background-position: 0% 0;
+  box-shadow: var(--gold-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition:
+    transform var(--t-mid) var(--ease-out),
+    background-position 600ms var(--ease-out),
+    box-shadow var(--t-slow) var(--ease-io);
 }
-.btn--solid:hover { --btn-bg: var(--c-accent-2); --btn-bd: var(--c-accent-2); }
+@media (hover: hover) and (pointer: fine) {
+  .btn--solid:hover {
+    background-position: 100% 0;
+    box-shadow: 0 14px 34px -10px rgba(227, 179, 65, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+}
 
 .btn--ghost:hover {
   --btn-bd: var(--c-accent);
@@ -209,6 +240,7 @@ ul { list-style: none; padding: 0; }
   border-bottom: 1px solid transparent;
 }
 .site-header.is-stuck {
+  background: rgba(11, 11, 12, 0.88); /* reserva iOS < 16.2 (sem color-mix) */
   background: color-mix(in srgb, var(--c-base) 88%, transparent);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -291,6 +323,7 @@ ul { list-style: none; padding: 0; }
 /* ================================================================ HERO */
 .hero {
   position: relative;
+  min-height: 100vh; /* reserva iOS < 15.4 */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -327,7 +360,7 @@ ul { list-style: none; padding: 0; }
 }
 .hero__eyebrow {
   font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--c-accent);
   margin-bottom: var(--s-3);
@@ -339,12 +372,14 @@ ul { list-style: none; padding: 0; }
   font-size: clamp(2.6rem, 8.5vw, 6rem);
   line-height: 1.0;
   letter-spacing: -0.02em;
+  /* texto corrido: o navegador equilibra as linhas em qualquer largura
+     (antes as linhas eram fixas e "estilo" ficava sozinho) */
+  text-wrap: balance;
 }
-.hero__line-wrap { display: block; overflow: hidden; padding-bottom: 0.06em; }
-.hero__line { display: block; }
-.hero__line--accent { font-style: italic; color: var(--c-accent-2); }
+.hero__line--accent { font-style: italic; }
 
 .hero__lede {
+  text-wrap: pretty;
   margin-top: var(--s-3);
   max-width: 46ch;
   font-size: 1.08rem;
@@ -358,8 +393,16 @@ ul { list-style: none; padding: 0; }
 }
 .hero__actions .btn { text-align: center; }
 
+/* Linha curta sob o botão: tira a dúvida de "como funciona" antes do clique */
+.cta-note {
+  margin-top: 12px;
+  font-size: 0.86rem;
+  color: var(--c-text-dim);
+}
+
 .hero__meta {
   width: min(340px, 42vw);
+  background: rgba(20, 20, 22, 0.72); /* reserva iOS < 16.2 */
   background: color-mix(in srgb, var(--c-surface) 72%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -418,6 +461,12 @@ ul { list-style: none; padding: 0; }
 }
 .section__intro { align-self: end; }
 
+/* Cards que entram vindo dos lados (GSAP) não podem criar rolagem lateral */
+.cuts, .services, .plans {
+  overflow-x: hidden; /* reserva para iOS < 16 */
+  overflow-x: clip;
+}
+
 /* ================================================================ KIDS */
 .kids {
   position: relative;
@@ -449,7 +498,7 @@ ul { list-style: none; padding: 0; }
   z-index: -1;
   top: 10%; right: -10%;
   width: 60vw; height: 60vw;
-  background: radial-gradient(circle, rgba(201, 161, 91, 0.16), transparent 62%);
+  background: radial-gradient(circle, rgba(227, 179, 65, 0.16), transparent 62%);
   pointer-events: none;
 }
 
@@ -483,9 +532,63 @@ ul { list-style: none; padding: 0; }
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
 }
 .kids__badge .icon { color: var(--c-accent); }
+
+/* Botão de som do vídeo Kids */
+.sound-toggle {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px 10px 12px;
+  border: 1px solid rgba(227, 179, 65, 0.6); /* reserva iOS < 16.2 */
+  border: 1px solid color-mix(in srgb, var(--c-accent) 60%, transparent);
+  border-radius: 999px;
+  background: rgba(11, 11, 12, 0.62);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--c-text);
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: background-color var(--t-mid) var(--ease-io), border-color var(--t-mid) var(--ease-io);
+}
+.sound-toggle .icon { width: 20px; height: 20px; color: var(--c-accent-2); }
+.sound-toggle__on { display: none; }
+.sound-toggle[aria-pressed="true"] .sound-toggle__on { display: block; }
+.sound-toggle[aria-pressed="true"] .sound-toggle__off { display: none; }
+.sound-toggle[aria-pressed="true"] { border-color: var(--c-accent); }
+/* chama atenção para o som até o primeiro toque (anel dourado pulsando) */
+.sound-toggle[aria-pressed="false"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid var(--c-accent);
+  animation: soundPing 2.2s var(--ease-out) infinite;
+  pointer-events: none;
+}
+@keyframes soundPing {
+  0% { transform: scale(1); opacity: 0.9; }
+  70%, 100% { transform: scale(1.25); opacity: 0; }
+}
 .kids__badge figcaption { font-size: 0.86rem; line-height: 1.45; color: var(--c-text); }
 
 .kids__copy .section__title { margin-bottom: var(--s-3); }
+
+/* Seção de atendimento infantil centralizada (pedido do cliente) */
+.kids__copy { text-align: center; }
+.kids__copy .prose { margin-inline: auto; }
+.kids__list { justify-items: center; }
+.kids__copy > .btn {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.kids__copy .cta-note { text-align: center; }
 .kids__list {
   display: grid;
   gap: 10px;
@@ -521,9 +624,9 @@ ul { list-style: none; padding: 0; }
 }
 .chip:hover { color: var(--c-text); border-color: var(--c-line-strong); }
 .chip.is-active {
-  color: #1a1305;
-  background: var(--c-accent);
-  border-color: var(--c-accent);
+  color: var(--c-accent-ink);
+  background: var(--gold-metal);
+  border-color: transparent;
 }
 
 .cuts__grid {
@@ -674,7 +777,9 @@ ul { list-style: none; padding: 0; }
 }
 .svc-card:hover { transform: translateY(-4px); border-color: var(--c-line-strong); }
 .svc-card--feature {
+  background: linear-gradient(180deg, #2D271B, var(--c-surface)); /* reserva iOS < 16.2 */
   background: linear-gradient(180deg, color-mix(in srgb, var(--c-accent) 12%, var(--c-surface)), var(--c-surface));
+  border-color: rgba(227, 179, 65, 0.4);
   border-color: color-mix(in srgb, var(--c-accent) 40%, transparent);
 }
 
@@ -726,17 +831,20 @@ ul { list-style: none; padding: 0; }
 .plan-card .btn { width: 100%; }
 
 .plan-card--best {
+  background: linear-gradient(180deg, #352D1D, var(--c-surface)); /* reserva iOS < 16.2 */
   background: linear-gradient(180deg, color-mix(in srgb, var(--c-accent) 16%, var(--c-surface)), var(--c-surface));
+  border-color: rgba(227, 179, 65, 0.55);
   border-color: color-mix(in srgb, var(--c-accent) 55%, transparent);
-  box-shadow: 0 40px 80px -40px rgba(201, 161, 91, 0.35);
+  box-shadow: 0 40px 80px -40px rgba(227, 179, 65, 0.35);
 }
 .plan-card--best .plan-card__list li { color: var(--c-text); }
 .plan-card__badge {
   position: absolute;
   top: -13px;
   left: var(--s-4);
-  background: var(--c-accent);
-  color: #1a1305;
+  background: var(--gold-metal);
+  color: var(--c-accent-ink);
+  box-shadow: var(--gold-glow);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -749,7 +857,7 @@ ul { list-style: none; padding: 0; }
 .book {
   padding-block: clamp(72px, 13vw, 140px);
   background:
-    radial-gradient(90% 120% at 85% 0%, rgba(201, 161, 91, 0.12), transparent 55%),
+    radial-gradient(90% 120% at 85% 0%, rgba(227, 179, 65, 0.12), transparent 55%),
     var(--c-surface);
   border-block: 1px solid var(--c-line);
 }
@@ -911,16 +1019,32 @@ ul { list-style: none; padding: 0; }
   transform: translateY(28px);
 }
 .gsap-ready [data-hero] { opacity: 0; }
-.gsap-ready [data-hero="line"] { transform: translateY(102%); }
 .gsap-ready [data-hero="eyebrow"],
 .gsap-ready [data-hero="lede"],
 .gsap-ready [data-hero="actions"] { transform: translateY(16px); }
 .gsap-ready [data-hero="meta"] { transform: translateY(24px); }
 
+/* Títulos com data-letters (efeito "letras acendendo"): ficam ocultos só
+   enquanto o JS quebra o texto em letras; o JS mostra o título assim que as
+   letras já estão invisíveis, então não há piscada. Sem gsap-ready (reduzir
+   movimento ou JS desligado) eles aparecem normalmente. */
+.gsap-ready [data-letters] { visibility: hidden; }
+.anim-failsafe [data-letters] { visibility: visible !important; }
+
+/* Durante o efeito o texto dourado vira letras soltas; o degradê é aplicado
+   em cada letra (no fim o SplitText desfaz a quebra e o degradê volta inteiro) */
+.u-accent .char,
+.hero__line--accent .char {
+  background-image: var(--gold-metal);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Failsafe: if GSAP never runs, reveal everything. */
 .anim-failsafe [data-reveal],
 .anim-failsafe [data-hero],
-.anim-failsafe [data-hero="line"] {
+.anim-failsafe [data-hero="title"] {
   opacity: 1 !important;
   transform: none !important;
 }
@@ -950,10 +1074,16 @@ ul { list-style: none; padding: 0; }
 
   .wrap { --gutter: 20px; }
   .hero {
+    min-height: max(680px, 100vh); /* reserva iOS < 15.4 */
     min-height: max(680px, 100svh);
     padding-bottom: 88px;
   }
-  .hero__title { font-size: clamp(2.45rem, 13vw, 4.4rem); }
+  .hero__title {
+    font-size: clamp(2.45rem, 12vw, 4.4rem);
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
   .hero__lede { font-size: 1rem; max-width: 38ch; }
   .hero__actions { align-items: stretch; }
   .hero__actions .btn { flex: 1 1 100%; }
@@ -1011,19 +1141,52 @@ ul { list-style: none; padding: 0; }
   .plan-card__price span { font-size: 2rem; }
   .book__hours { line-height: 1.8; }
   .contact__actions .btn { flex: 1 1 100%; }
+
+  /* Celular: botões soltos e a linha de apoio ficam centralizados */
+  .kids__copy > .btn,
+  .ig .wrap > .btn {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+  .book__actions { justify-items: center; text-align: center; }
+  /* horários um embaixo do outro, sem o "·" sobrando no fim da linha */
+  .book__hours .sep { display: none; }
+  .book__hours > span { display: block; }
+  .cta-note { text-align: center; }
   .contact__map { aspect-ratio: 1 / 1; }
   .wa-float { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); }
 }
 
 @media (max-width: 380px) {
   .brand__tag { letter-spacing: 0.25em; font-size: 0.54rem; }
-  .hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.14em; }
+  .hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.06em; }
   .hero__title { font-size: 2.35rem; }
   .hero__meta-row { gap: 9px; }
   .hero__meta-label { font-size: 0.65rem; }
   .hero__meta-value { font-size: 0.8rem; }
   .section__title { font-size: 2rem; }
   .ig__grid { gap: 6px; }
+}
+
+/* ================================================ iPHONE / TOQUE */
+/* No iOS um card girando em 3D (efeito "placa" do GSAP) pode ignorar o
+   z-index e passar por cima do cabeçalho fixo; isolar o conteúdo resolve. */
+main { position: relative; z-index: 0; isolation: isolate; }
+
+/* Em tela de toque o :hover "gruda" depois do toque: cards ficavam
+   levantados e a faixa de famosos parava. Sem mouse, nada disso. */
+@media (hover: none) {
+  .btn:hover,
+  .cut-card:hover,
+  .fame-card:hover,
+  .svc-card:hover,
+  .plan-card:hover,
+  .wa-float:hover { transform: none; }
+  .cut-card:hover > img,
+  .ig__grid a:hover img { transform: none; }
+  .fame__track:hover { animation-play-state: running; }
 }
 
 /* ============================================ PREFERS-REDUCED-MOTION */
@@ -1036,7 +1199,7 @@ ul { list-style: none; padding: 0; }
   }
   .hero__scroll span { animation: none; opacity: 1; }
   .fame__track { animation: none !important; }
-  [data-reveal], [data-hero], [data-hero="line"] { opacity: 1 !important; transform: none !important; }
+  [data-reveal], [data-hero] { opacity: 1 !important; transform: none !important; }
   .hero__video { display: none; }
   .hero__media { background: #0d0d0f url("img/corte-1.jpg") center/cover; }
   .hero__media::after { content: ""; position: absolute; inset: 0; background: rgba(11,11,12,0.6); }

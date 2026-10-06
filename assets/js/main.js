@@ -62,7 +62,7 @@
           var show = f === "all" || card.dataset.cat === f;
           card.hidden = !show;
           if (show && window.gsap && !reduceMotion) {
-            window.gsap.fromTo(card, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" });
+            window.gsap.fromTo(card, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
           }
         });
       });
@@ -88,6 +88,23 @@
     }
   }
 
+  /* --------------------------- som do vídeo Kids (só depois do toque) */
+  var soundBtn = doc.querySelector(".sound-toggle");
+  if (kidsVideo && soundBtn) {
+    var soundLabel = soundBtn.querySelector(".sound-toggle__label");
+    soundBtn.addEventListener("click", function () {
+      var on = kidsVideo.muted; /* estava mudo -> liga */
+      kidsVideo.muted = !on;
+      if (on) {
+        kidsVideo.volume = 1;
+        var pp = kidsVideo.play(); /* o toque libera o som também no iPhone */
+        if (pp && pp.catch) pp.catch(function () {});
+      }
+      soundBtn.setAttribute("aria-pressed", String(on));
+      soundLabel.textContent = on ? "Desativar som" : "Ativar som";
+    });
+  }
+
   /* tenta iniciar o vídeo do hero (autoplay mudo) */
   var heroVideo = doc.querySelector(".hero__video");
   if (heroVideo && !reduceMotion) {
@@ -100,9 +117,68 @@
   if (fameTrack && !reduceMotion) fameTrack.setAttribute("data-run", "true");
 
   /* ================================================================
-     GSAP — entrada do hero + profundidade da seção Kids
+     GSAP: entrada do hero, profundidade da seção Kids, letras acendendo
+     nos títulos e um efeito próprio por seção (cards, galeria, feed, mapa)
      ================================================================ */
+  /* ---------------------------------------------------------------
+     Efeito "letras acendendo em ordem aleatória" (títulos com data-letters)
+     - quebra em palavras + letras: a palavra nunca se parte no meio da linha
+     - o SplitText põe aria-label no título e esconde as letras do leitor de
+       tela, então ele lê a frase normal
+     - o título inteiro leva ~1,4s, tenha quantas letras tiver
+     - no fim desfaz a quebra (o texto volta ao normal e o degradê dourado
+       volta a ser contínuo)
+     Retorna { chars, play } ou null se não deu para quebrar.
+     --------------------------------------------------------------- */
+  var prepararLetras = function (titulo) {
+    var gsap = window.gsap;
+    if (!window.SplitText) return null;
+    /* frase para o leitor de tela, tirada do texto como aparece na tela:
+       o rótulo automático do SplitText juntava palavras separadas por <br>
+       ("assinama casa") e lia o código do espaço fixo */
+    var copia = titulo.cloneNode(true);
+    Array.prototype.forEach.call(copia.querySelectorAll("br"), function (br) {
+      br.parentNode.replaceChild(doc.createTextNode(" "), br);
+    });
+    var frase = copia.textContent.replace(/\s+/g, " ").trim(); /* \s também pega o espaço fixo */
+    var split;
+    try {
+      split = new window.SplitText(titulo, {
+        type: "words,chars", tag: "span", wordsClass: "word", charsClass: "char"
+      });
+    } catch (e) { return null; }
+    titulo.setAttribute("aria-label", frase);
+    gsap.set(split.chars, { opacity: 0 });        /* esconde as letras antes de mostrar o título: sem piscada */
+    gsap.set(titulo, { visibility: "visible" });
+    return {
+      chars: split.chars,
+      anim: function () {
+        return gsap.to(split.chars, {
+          opacity: 1, duration: 0.5, ease: "power1.out",
+          stagger: { amount: 1.4, from: "random" },
+          onComplete: function () { split.revert(); }
+        });
+      }
+    };
+  };
+
+  var revelarLetras = function (titulo) {
+    var fx = prepararLetras(titulo);
+    if (!fx) { window.gsap.set(titulo, { visibility: "visible" }); return; }
+    if (window.ScrollTrigger) {
+      window.ScrollTrigger.create({ trigger: titulo, start: "top 82%", once: true, onEnter: fx.anim });
+    } else {
+      fx.anim();
+    }
+  };
+
   var startGsap = function () {
+    /* se a rede de segurança já revelou a página (fontes muito lentas),
+       não esconder nada de novo: só tira o estado de espera */
+    if (root.classList.contains("anim-failsafe")) {
+      root.classList.remove("gsap-ready");
+      return;
+    }
     if (reduceMotion || !window.gsap) {
       root.classList.remove("gsap-ready");
       root.classList.add("anim-failsafe");
@@ -111,17 +187,26 @@
 
     var gsap = window.gsap;
     if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
+    if (window.SplitText) gsap.registerPlugin(window.SplitText);
 
     /* ---- 1. Entrada orquestrada do hero -------------------------- */
-    var tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    /* Ritmo geral do site: suave e sem pressa (pedido do cliente) */
+    var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.to("[data-hero='eyebrow']", { opacity: 1, y: 0, duration: 0.7 })
-      .to("[data-hero='line']", { yPercent: 0, opacity: 1, duration: 1.05, stagger: 0.09 }, "-=0.45")
+    /* Título do topo: já está na tela ao abrir, então não usa ScrollTrigger;
+       as letras acendem dentro da própria animação de abertura. */
+    var heroTitle = doc.querySelector(".hero [data-letters]");
+    var heroFx = heroTitle ? prepararLetras(heroTitle) : null;
+    if (heroTitle && !heroFx) gsap.set(heroTitle, { visibility: "visible" });
+
+    tl.to("[data-hero='eyebrow']", { opacity: 1, y: 0, duration: 1.1 });
+    if (heroFx) tl.add(heroFx.anim(), "-=0.6");
+    tl
       /* o bloco de informações (elemento visual) assume a posição final
          junto com as últimas linhas do título, não depois */
-      .to("[data-hero='meta']", { opacity: 1, y: 0, duration: 1 }, "<0.15")
-      .to("[data-hero='lede']", { opacity: 1, y: 0, duration: 0.8 }, "-=0.7")
-      .to("[data-hero='actions']", { opacity: 1, y: 0, duration: 0.7 }, "-=0.55");
+      .to("[data-hero='meta']", { opacity: 1, y: 0, duration: 1.5 }, "<0.25")
+      .to("[data-hero='lede']", { opacity: 1, y: 0, duration: 1.3 }, "-=1.1")
+      .to("[data-hero='actions']", { opacity: 1, y: 0, duration: 1.2, stagger: 0.12 }, "-=0.9");
 
     /* ---- 2. Profundidade real na seção Kids (camadas, scrub) ---- */
     if (window.ScrollTrigger) {
@@ -142,63 +227,152 @@
             trigger: ".kids",
             start: "top bottom",
             end: "bottom top",
-            scrub: 0.6
+            scrub: 1.2 /* parallax segue a rolagem com atraso macio */
           }
         });
       });
 
-      /* SplitText (moderação): o único texto que "monta" palavra a palavra */
-      var kidsTitle = doc.querySelector("[data-reveal='kids-title']");
-      if (kidsTitle) {
-        var kWords = null;
-        try {
-          if (window.SplitText) {
-            kWords = new window.SplitText(kidsTitle, { type: "words" }).words;
-          }
-        } catch (e) { kWords = null; }
+      /* ---- efeitos por seção (cada um ligado ao conteúdo) ------ */
+      if (window.ScrollTrigger.config) window.ScrollTrigger.config({ ignoreMobileResize: true });
+      var once = function (trigger, start) {
+        return { trigger: trigger, start: start || "top 85%", once: true };
+      };
 
-        gsap.set(kidsTitle, { opacity: 1, y: 0 });
-        if (kWords && kWords.length) gsap.set(kWords, { opacity: 0, y: 24 });
+      /* Títulos de seção com data-letters: letras acendem ao entrar na tela */
+      Array.prototype.forEach.call(doc.querySelectorAll("[data-letters]"), function (titulo) {
+        if (!titulo.closest(".hero")) revelarLetras(titulo);
+      });
 
-        var played = false;
-        var playKids = function () {
-          if (played) return;
-          played = true;
-          if (kWords && kWords.length) {
-            gsap.to(kWords, { opacity: 1, y: 0, duration: 0.7, stagger: 0.055, ease: "expo.out" });
-          } else {
-            gsap.fromTo(kidsTitle, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" });
-          }
-        };
+      /* Rótulo dourado e texto de apoio entram logo depois do título */
+      Array.prototype.forEach.call(doc.querySelectorAll(".section__eyebrow"), function (el) {
+        gsap.from(el, { opacity: 0, x: -16, duration: 1.2, ease: "power2.out", scrollTrigger: once(el, "top 90%") });
+      });
+      Array.prototype.forEach.call(doc.querySelectorAll(".section__intro"), function (el) {
+        gsap.from(el, { opacity: 0, y: 20, duration: 1.4, delay: 0.25, ease: "power2.out", scrollTrigger: once(el, "top 90%") });
+      });
 
-        window.ScrollTrigger.create({
-          trigger: ".kids",
-          start: "top 45%",
-          once: true,
-          onEnter: playKids
+      /* Cards: cada um entra de um jeito diferente (a ordem dos efeitos
+         se repete se houver mais cards que efeitos). clearProps devolve o
+         controle ao CSS no fim, para o hover continuar funcionando. */
+      var ENTRANCES = [
+        { from: { opacity: 0, y: 50 } },                                         /* sobe */
+        { from: { opacity: 0, x: -60, rotation: -2.5 } },                        /* vem da esquerda, girando de leve */
+        { from: { opacity: 0, scale: 0.9 } },                                    /* cresce */
+        { from: { opacity: 0, x: 60, rotation: 2.5 } },                          /* vem da direita, girando de leve */
+        { from: { opacity: 0, rotationX: -40, transformOrigin: "50% 0%", transformPerspective: 1000 } }, /* abre como placa */
+        { from: { opacity: 0, y: -40, scale: 0.96 } }                            /* desce no lugar */
+      ];
+      /* Efeitos com nome: um card pode escolher o seu no HTML com
+         data-entrada="nome" (passa por cima da ordem automática). */
+      var ENTRADAS_NOMEADAS = {
+        foco:     { from: { opacity: 0, scale: 1.06, filter: "blur(10px)" } },  /* entra em foco */
+        sobe:     ENTRANCES[0],
+        esquerda: ENTRANCES[1],
+        cresce:   ENTRANCES[2],
+        direita:  ENTRANCES[3],
+        placa:    ENTRANCES[4],
+        desce:    ENTRANCES[5]
+      };
+      var entradaDo = function (card, padrao) {
+        return ENTRADAS_NOMEADAS[card.getAttribute("data-entrada")] || padrao;
+      };
+      /* junta o estado inicial do efeito com as opções da animação */
+      var comEfeito = function (fx, opcoes) {
+        var v = {}, k;
+        for (k in fx.from) v[k] = fx.from[k];
+        for (k in opcoes) v[k] = opcoes[k];
+        return v;
+      };
+      /* start: em que altura da tela o card dispara ("top 50%" = quando o
+         topo do card chega na metade da tela). stagger: atraso entre
+         cards da mesma linha (0 quando cada um tem o seu gatilho). */
+      /* rowDelay: número = atraso entre colunas; 0 = sem atraso;
+         "fila" = cards que estão na mesma linha da tela entram um depois do
+         outro (no celular, uma coluna, cada card tem seu próprio momento) */
+      var revealCards = function (selector, offset, start, rowDelay) {
+        var cards = Array.prototype.slice.call(doc.querySelectorAll(selector));
+        var posNaLinha = cards.map(function (card, i) {
+          var n = 0, top = card.offsetTop;
+          for (var k = 0; k < i; k++) if (Math.abs(cards[k].offsetTop - top) < 4) n++;
+          return n;
         });
-        setTimeout(playKids, 3500); /* backup: nunca fica escondido */
-      }
-
-      /* ---- reveals discretos no scroll (uma vez) --------------- */
-      var reveals = Array.prototype.slice.call(
-        doc.querySelectorAll("[data-reveal]:not([data-reveal='kids-title'])")
-      );
-      if (window.ScrollTrigger.batch) {
-        window.ScrollTrigger.batch(reveals, {
-          start: "top 85%",
-          once: true,
-          onEnter: function (els) {
-            gsap.to(els, {
-              opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "expo.out"
-            });
-          }
+        cards.forEach(function (card, i) {
+          var fx = entradaDo(card, ENTRANCES[(i + (offset || 0)) % ENTRANCES.length]);
+          /* a transição de CSS do card (usada no hover) brigaria com o GSAP
+             quadro a quadro e deixaria a entrada travada: fica desligada
+             durante a animação e volta no fim (clearProps) */
+          gsap.set(card, { opacity: 1, y: 0, transition: "none" });
+          gsap.from(card, comEfeito(fx, {
+            duration: 1.7,
+            delay: rowDelay === "fila" ? posNaLinha[i] * 0.6
+                 : rowDelay === 0 ? 0 : (i % 3) * 0.2, /* cards da mesma linha não entram juntos */
+            ease: "power2.out", /* desacelera devagar, nada brusco */
+            clearProps: "transform,opacity,transition,filter",
+            scrollTrigger: once(card, start || "top 92%")
+          }));
         });
-      } else {
-        gsap.set(reveals, { opacity: 1, y: 0 });
-      }
+      };
+
+      /* Galeria: a foto se revela por dentro (recorte) e o card entra com efeito próprio */
+      /* cada card dispara sozinho quando chega na metade da tela */
+      Array.prototype.forEach.call(doc.querySelectorAll(".cut-card > img"), function (img) {
+        gsap.set(img, { transition: "none" });
+        gsap.from(img, { scale: 1.15, duration: 2, ease: "power2.out", clearProps: "transform,transition",
+          scrollTrigger: once(img.parentNode, "top 50%") });
+      });
+      revealCards(".cut-card", 0, "top 50%", 0);
+      /* Serviços avulsos: animação presa à rolagem (scrub). O card avança
+         conforme você rola e termina exatamente quando o topo dele chega na
+         metade da tela; rolando para cima, ele volta. Cards na mesma linha
+         (desktop) têm o trecho deslocado, então entram um de cada vez. */
+      (function () {
+        var cards = Array.prototype.slice.call(doc.querySelectorAll(".svc-card"));
+        cards.forEach(function (card, i) {
+          var n = 0;
+          for (var k = 0; k < i; k++) if (Math.abs(cards[k].offsetTop - card.offsetTop) < 4) n++;
+          var fx = entradaDo(card, ENTRANCES[(i + 2) % ENTRANCES.length]); /* cada card com um efeito */
+          var atraso = n * 140; /* px de rolagem entre cards da mesma linha */
+          /* só a transição da borda/fundo do hover continua no CSS; transform e
+             opacidade ficam com o GSAP o tempo todo (por causa do scrub) */
+          gsap.set(card, { opacity: 1, y: 0, transition: "border-color 250ms, background-color 250ms" });
+          gsap.from(card, comEfeito(fx, {
+            ease: "none", /* com scrub a suavidade vem da rolagem */
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom-=" + atraso,
+              end: "top 50%-=" + atraso,
+              scrub: 1.2 /* segue a rolagem com atraso macio */
+            }
+          }));
+        });
+      })();
+      revealCards(".plan-card", 4);
+
+      /* Famosos: os cards deslizam para dentro (a faixa em si já tem a
+         animação contínua em CSS, então o efeito vai nos cards) */
+      gsap.set(".fame__row:first-child .fame-card", { transition: "none" });
+      gsap.from(".fame__row:first-child .fame-card", { opacity: 0, x: 80, duration: 1.6, ease: "power2.out",
+        stagger: 0.15, clearProps: "transform,opacity,transition", scrollTrigger: once(".fame__track") });
+
+      /* Instagram: as fotos acendem em sequência, como um feed carregando */
+      gsap.set(".ig__grid img", { transition: "none" });
+      gsap.from(".ig__grid li", { opacity: 0, scale: 0.92, duration: 1.3, ease: "power2.out",
+        stagger: { each: 0.12, from: "start" }, scrollTrigger: once(".ig__grid"),
+        onComplete: function () { gsap.set(".ig__grid img", { clearProps: "transition" }); } });
+
+      /* Contato: o pino cai no mapa */
+      gsap.from(".contact__pin", { y: -60, opacity: 0, duration: 1.6, ease: "power3.out", scrollTrigger: once(".contact__map", "top 80%") });
+
+      /* Agendamento: o brilho dourado acompanha a rolagem (só em telas grandes) */
+      gsap.matchMedia().add("(min-width: 900px)", function () {
+        gsap.fromTo(".book", { backgroundPosition: "0% 0%" }, { backgroundPosition: "0% 100%", ease: "none",
+          scrollTrigger: { trigger: ".book", start: "top bottom", end: "bottom top", scrub: 0.6 } });
+      });
     } else {
       gsap.set("[data-reveal]", { opacity: 1, y: 0 });
+      Array.prototype.forEach.call(doc.querySelectorAll("[data-letters]"), function (t) {
+        if (!t.closest(".hero")) revelarLetras(t); /* sem ScrollTrigger: acende direto */
+      });
     }
 
     root.classList.remove("gsap-ready");
@@ -213,10 +387,10 @@
 
   var kickoff = function () {
     if (doc.fonts && doc.fonts.ready) {
-      var done = false;
-      var go = function () { if (!done) { done = true; startGsap(); } };
-      doc.fonts.ready.then(go);
-      setTimeout(go, 1500); /* não espera fontes travadas */
+      /* as letras só podem ser quebradas depois das fontes carregarem,
+         senão as quebras de linha saem erradas; se as fontes travarem, a
+         rede de segurança (3,6s) mostra a página sem animação */
+      doc.fonts.ready.then(startGsap);
     } else {
       startGsap();
     }
