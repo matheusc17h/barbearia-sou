@@ -58,12 +58,13 @@
           c.classList.toggle("is-active", on);
           c.setAttribute("aria-selected", String(on));
         });
+        /* O filtro destaca os cortes escolhidos e esmaece os outros, sem
+           tirá-los do lugar: esconder cards mudava a altura da página e
+           bagunçava as animações presas à rolagem das seções de baixo. */
         cards.forEach(function (card) {
-          var show = f === "all" || card.dataset.cat === f;
-          card.hidden = !show;
-          if (show && window.gsap && !reduceMotion) {
-            window.gsap.fromTo(card, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-          }
+          var match = f === "all" || card.dataset.cat === f;
+          card.classList.toggle("is-dimmed", !match);
+          card.setAttribute("aria-hidden", String(!match));
         });
       });
     });
@@ -235,18 +236,20 @@
 
     /* ---- 2. Profundidade real na seção Kids (camadas, scrub) ---- */
     if (window.ScrollTrigger) {
+      /* [elemento, começa (yPercent), termina]: tudo sobe de baixo para cima
+         conforme a rolagem (o cliente não gosta de nada descendo) */
       var layers = [
-        ["[data-parallax='media']", -6],
-        ["[data-parallax='badge']", -22],
-        ["[data-parallax='copy']", 5],
-        [".kids__bg", -14],
-        [".kids__glow", -9]
+        ["[data-parallax='media']", 12, -6],
+        ["[data-parallax='badge']", 30, -16],
+        ["[data-parallax='copy']", 8, -4],
+        [".kids__bg", 0, -14],
+        [".kids__glow", 0, -9]
       ];
-      layers.forEach(function (pair) {
-        var el = doc.querySelector(pair[0]);
+      layers.forEach(function (camada) {
+        var el = doc.querySelector(camada[0]);
         if (!el) return;
-        gsap.to(el, {
-          yPercent: pair[1],
+        gsap.fromTo(el, { yPercent: camada[1] }, {
+          yPercent: camada[2],
           ease: "none",
           scrollTrigger: {
             trigger: ".kids",
@@ -279,24 +282,25 @@
       /* Cards: cada um entra de um jeito diferente (a ordem dos efeitos
          se repete se houver mais cards que efeitos). clearProps devolve o
          controle ao CSS no fim, para o hover continuar funcionando. */
+      /* Nenhum efeito vem de cima para baixo (o cliente não gosta):
+         "placa" (girava de cima) e "desce" foram removidos. */
       var ENTRANCES = [
         { from: { opacity: 0, y: 50 } },                                         /* sobe */
         { from: { opacity: 0, x: -60, rotation: -2.5 } },                        /* vem da esquerda, girando de leve */
         { from: { opacity: 0, scale: 0.9 } },                                    /* cresce */
         { from: { opacity: 0, x: 60, rotation: 2.5 } },                          /* vem da direita, girando de leve */
-        { from: { opacity: 0, rotationX: -40, transformOrigin: "50% 0%", transformPerspective: 1000 } }, /* abre como placa */
-        { from: { opacity: 0, y: -40, scale: 0.96 } }                            /* desce no lugar */
+        { from: { opacity: 0, scale: 1.06, filter: "blur(10px)" } },            /* entra em foco */
+        { from: { opacity: 0, y: 60, rotation: -1.5 } }                          /* sobe girando de leve */
       ];
       /* Efeitos com nome: um card pode escolher o seu no HTML com
          data-entrada="nome" (passa por cima da ordem automática). */
       var ENTRADAS_NOMEADAS = {
-        foco:     { from: { opacity: 0, scale: 1.06, filter: "blur(10px)" } },  /* entra em foco */
         sobe:     ENTRANCES[0],
         esquerda: ENTRANCES[1],
         cresce:   ENTRANCES[2],
         direita:  ENTRANCES[3],
-        placa:    ENTRANCES[4],
-        desce:    ENTRANCES[5]
+        foco:     ENTRANCES[4],
+        girando:  ENTRANCES[5]
       };
       var entradaDo = function (card, padrao) {
         return ENTRADAS_NOMEADAS[card.getAttribute("data-entrada")] || padrao;
@@ -338,39 +342,50 @@
         });
       };
 
-      /* Galeria: a foto se revela por dentro (recorte) e o card entra com efeito próprio */
-      /* cada card dispara sozinho quando chega na metade da tela */
-      Array.prototype.forEach.call(doc.querySelectorAll(".cut-card > img"), function (img) {
-        gsap.set(img, { transition: "none" });
-        gsap.from(img, { scale: 1.15, duration: 2, ease: "power2.out", clearProps: "transform,transition",
-          scrollTrigger: once(img.parentNode, "top 50%") });
-      });
-      revealCards(".cut-card", 0, "top 50%", 0);
-      /* Serviços avulsos: animação presa à rolagem (scrub). O card avança
-         conforme você rola e termina exatamente quando o topo dele chega na
-         metade da tela; rolando para cima, ele volta. Cards na mesma linha
-         (desktop) têm o trecho deslocado, então entram um de cada vez. */
-      (function () {
-        var cards = Array.prototype.slice.call(doc.querySelectorAll(".svc-card"));
+      /* Cards presos à rolagem (scrub): o card avança conforme você rola e
+         termina exatamente quando o topo dele chega na metade da tela;
+         rolando para cima, ele volta. Cards na mesma linha (desktop) têm o
+         trecho deslocado, então entram um de cada vez.
+         foto: seletor de uma imagem dentro do card que também "assenta"
+         (zoom diminuindo) junto com a rolagem. */
+      var cardsNaRolagem = function (selector, offset, foto) {
+        var cards = Array.prototype.slice.call(doc.querySelectorAll(selector));
         cards.forEach(function (card, i) {
           var n = 0;
           for (var k = 0; k < i; k++) if (Math.abs(cards[k].offsetTop - card.offsetTop) < 4) n++;
-          var fx = entradaDo(card, ENTRANCES[(i + 2) % ENTRANCES.length]); /* cada card com um efeito */
+          var fx = entradaDo(card, ENTRANCES[(i + offset) % ENTRANCES.length]); /* cada card com um efeito */
           var atraso = n * 140; /* px de rolagem entre cards da mesma linha */
           /* só a transição da borda/fundo do hover continua no CSS; transform e
              opacidade ficam com o GSAP o tempo todo (por causa do scrub) */
           gsap.set(card, { opacity: 1, y: 0, transition: "border-color 250ms, background-color 250ms" });
-          gsap.from(card, comEfeito(fx, {
-            ease: "none", /* com scrub a suavidade vem da rolagem */
-            scrollTrigger: {
+          var trecho = function () { /* um objeto novo para cada animação */
+            return {
               trigger: card,
               start: "top bottom-=" + atraso,
               end: "top 50%-=" + atraso,
               scrub: 1.2 /* segue a rolagem com atraso macio */
-            }
-          }));
+            };
+          };
+          /* fromTo com o estado final escrito: se o ScrollTrigger recalcular
+             com o card escondido pelo filtro (display:none), um from() regravaria
+             o final como "opacidade 0" e o card sumiria para sempre */
+          var final = { opacity: 1, x: 0, y: 0, scale: 1, rotation: 0,
+                        ease: "none", /* com scrub a suavidade vem da rolagem */
+                        scrollTrigger: trecho() };
+          if (fx.from.filter) final.filter = "blur(0px)";
+          gsap.fromTo(card, comEfeito(fx, {}), final);
+          var img = foto && card.querySelector(foto);
+          if (img) {
+            gsap.set(img, { transition: "none" });
+            gsap.fromTo(img, { scale: 1.15 }, { scale: 1, ease: "none", scrollTrigger: trecho() });
+          }
         });
-      })();
+      };
+
+      /* Cortes que assinam a casa: presos à rolagem, com a foto assentando */
+      cardsNaRolagem(".cut-card", 0, ":scope > img");
+      /* Serviços avulsos: presos à rolagem; começa por outro efeito */
+      cardsNaRolagem(".svc-card", 2);
       revealCards(".plan-card", 4);
 
       /* Famosos: os cards deslizam para dentro (a faixa em si já tem a

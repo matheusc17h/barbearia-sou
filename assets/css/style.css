@@ -711,6 +711,19 @@ ul { list-style: none; padding: 0; }
 .cut-card:hover > img { transform: scale(1.04); }
 
 .cut-card[hidden] { display: none; }
+/* filtro da galeria: o que não combina fica esmaecido por uma camada escura
+   (o card não sai do lugar e não briga com as animações do GSAP) */
+.cut-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  background: rgba(11, 11, 12, 0.78);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 450ms var(--ease-io);
+}
+.cut-card.is-dimmed::after { opacity: 1; }
 
 /* ============================================================== FAMOSOS */
 .fame { padding: clamp(56px, 8vw, 100px) 0 clamp(40px, 6vw, 68px); overflow: hidden; }
@@ -1167,6 +1180,12 @@ ul { list-style: none; padding: 0; }
   .plan-card__price span { font-size: 2rem; }
   .book__hours { line-height: 1.8; }
   .contact__actions .btn { flex: 1 1 100%; }
+
+  /* Celular: Contato e localização centralizado */
+  .contact__col { text-align: center; }
+  .contact__list dt { justify-content: center; }
+  .contact__actions { justify-content: center; }
+  .contact__map-note { left: 0; right: 0; text-align: center; }
 
   /* Celular: botões soltos e a linha de apoio ficam centralizados */
   .kids__copy > .btn,
