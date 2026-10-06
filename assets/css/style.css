@@ -1167,6 +1167,13 @@ ul { list-style: none; padding: 0; }
   .site-footer__inner { grid-template-columns: 1fr; }
   .ig__grid { grid-template-columns: repeat(3, 1fr); }
   .site-footer__base { flex-direction: column; }
+
+  /* Celular: rodapé centralizado */
+  .site-footer__inner,
+  .site-footer__base { text-align: center; }
+  .site-footer__brand .brand { align-items: center; }
+  .site-footer__brand p { margin-inline: auto; }
+  .site-footer__base { align-items: center; }
   .kids { padding-block: 88px; }
   .kids__list li { align-items: flex-start; }
   .kids__list .icon { margin-top: 3px; }
